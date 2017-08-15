@@ -1,0 +1,91 @@
+---
+title: "prep"
+author: "Ben Best"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Load Software
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load infographix, message=F, warning=F}
+if (!require('devtools')) install.packages('devtools')
+if (!require('infographiq')) devtools::install_github('marinebon/infographiq')
+library(infographiq)
+
+library(tidyverse)
+library(xml2)
+library(stringr)
+```
+
+## Prep
+
+### Plot Indicators
+
+```{r plot_indicators}
+ind_d = read_csv('https://raw.githubusercontent.com/mhepner90/RVC/master/SDG14/infographic_csv_indicators.csv')
+write_csv(ind_d, 'plot_indicators.csv')
+
+ind_d %>%
+  group_by(element) %>%
+  summarize(
+    n = n())
+```
+
+### SVG Elements
+
+```{r svg_elements}
+dir_svg = 'svg'
+
+svg_g_ids = function(svg){
+  g = read_xml(svg) %>%
+  xml_find_all("//svg:g") %>%
+  xml_attr('id')
+
+  g = g[!str_detect(g, '^g\\d+$')]
+  if (length(g)==0){
+    return(NA)
+  } else {
+    return(g)
+  }
+}
+
+svg_tbl = tibble() # svg=character(0), g_id=character(0))
+for (svg in list.files(dir_svg, '.*\\.svg$')){
+  svg_tbl = svg_tbl %>%
+    bind_rows(
+      data_frame(
+        svg   = svg,
+        g_id = svg_g_ids(
+          file.path(dir_svg, svg))))
+}
+
+svg_tbl %>%
+  arrange(svg, g_id)
+```
+
+
+### SVG Elements missing Plot Indicators
+
+```{r svg_elements missing plot_indicators}
+svg_tbl %>%
+  anti_join(ind_d, by=c('g_id'='element')) %>%
+  arrange(svg, g_id)
+```
+
+### Plot Indicators missing SVG Elements
+
+```{r plot_indicators missing svg_elements}
+ind_d %>%
+  anti_join(svg_tbl, by=c('element'='g_id')) %>%
+  arrange(region, element, title, csv_url)
+```
+
+## Create Site
+
+
