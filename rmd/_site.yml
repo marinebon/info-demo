@@ -2,7 +2,7 @@ name: "Florida Keys Infographics"
 output_dir: "../docs"
 lib_dir: libs
 navbar:
-  title: "Sanctuary Status"
+  title: "Florida Keys Infographics"
   left:
     - text: "Home"
       href: index.html
