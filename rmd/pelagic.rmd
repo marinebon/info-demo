@@ -5,8 +5,8 @@ title: "pelagic"
 <div id="scene"></div>
 
 <script>
-var svg = "pelagic.svg";
-var svg_path = "svg/pelagic.svg";
+var svg = "pelagic.svgz";
+var svg_path = "svg/pelagic.svgz";
 var svg_elements_csv = "svg_elements.csv";
 </script>
 
