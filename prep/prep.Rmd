@@ -1,0 +1,136 @@
+---
+title: "Prep Infographic Data" 
+author: "Ben Best"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+## Load Software
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load infographix, message=F, warning=F}
+if (!require('devtools')) install.packages('devtools')
+if (!require('infographiq')) devtools::install_github('marinebon/infographiq')
+#library(infographiq)
+# library(devtools); load_all('../../infographiq')
+#session_info()
+
+library(tidyverse)
+library(xml2)
+library(stringr)
+
+if ( basename(getwd()) != 'prep' ) setwd('prep')
+
+dir_svg = '../svg'
+indicators_csv = '../plot_indicators.csv'
+```
+
+## Read svg & csv
+
+### plot_indicators.csv
+
+```{r plot_indicators, message=F}
+# read_csv('https://raw.githubusercontent.com/mhepner90/RVC/master/SDG14/infographic_csv_indicators.csv') %>%
+#    write_csv(indicators_csv)
+ind_d = read_csv(indicators_csv)
+
+ind_d %>%
+  group_by(svg_id) %>%
+  summarize(
+    n = n())
+```
+
+### *.svg
+
+```{r svg_elements}
+svg_ids = function(svg){
+  ids = read_xml(svg) %>%
+    xml_find_all("//svg:g") %>%
+    xml_attr('id')
+  
+  ids = ids[!str_detect(ids, '^g\\d+$')]
+  if (length(ids)==0){
+    return(NA)
+  } else {
+    return(ids)
+  }
+}
+
+svg_tbl = tibble()
+for (svg in list.files(dir_svg, '.*\\.svg$')){
+  svg_tbl = svg_tbl %>%
+    bind_rows(
+      data_frame(
+        svg   = svg,
+        svg_id = svg_ids(
+          file.path(dir_svg, svg))))
+}
+
+svg_tbl %>%
+  arrange(svg, svg_id)
+```
+
+## Check svg_id matches
+
+### *.svg missing plot_indicators.csv
+
+```{r svg_elements missing plot_indicators}
+svg_tbl %>%
+  anti_join(ind_d, by='svg_id') %>%
+  arrange(svg, svg_id)
+```
+
+### *.svg missing plot_indicators.csv csv_url
+
+```{r svg_elements missing plot_indicator.url_csv}
+svg_tbl %>%
+  inner_join(ind_d, by='svg_id') %>%
+  filter(is.na(csv_url)) %>%
+  select(svg, svg_id, title, region, csv_url) %>%
+  arrange(svg, svg_id, title, region)
+```
+
+### plot_indicators.csv missing *.svg
+
+```{r plot_indicators missing svg_elements}
+ind_d %>%
+  anti_join(svg_tbl, by='svg_id') %>%
+  select(svg_id, title, region, csv_url) %>%
+  arrange(svg_id, title, region, csv_url) # %>% View()
+```
+
+## Query taxa groupings
+
+### snapper / grouper ?
+
+Here's any svg_id with the word snapper or grouper in it. Isn't this often thought of as the "snapper grouper complex", so should we aggregate these time series? 
+
+```{r}
+ind_d %>%
+  filter(str_detect(svg_id, regex('(snapper|grouper)', ignore_case=T))) %>%
+  group_by(svg_id) %>%
+  summarize(
+    n_rows = n())
+```
+
+
+## Create Site
+
+```{r, eval=F}
+load_all('../../infographiq') # reload package from source
+
+create_site()
+```
+
+
+
+...
+

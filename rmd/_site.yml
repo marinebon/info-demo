@@ -1,0 +1,28 @@
+name: "Florida Keys Infographics"
+output_dir: ../docs
+lib_dir: libs
+navbar:
+  title: "Sanctuary Status"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "corals"
+      href: corals.html
+    - text: "mangroves"
+      href: mangroves.html
+    - text: "pelagic"
+      href: pelagic.html
+    - text: "seagrass"
+      href: seagrass.html
+  right:
+    - icon: fa-info-circle fa-lg
+      href: "README.html"
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
+    include:
+      in_header: _header.html
+      after_body: _footer.html
+    css: styles.css
+exclude: ["prep.Rmd"]
