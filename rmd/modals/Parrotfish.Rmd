@@ -28,48 +28,48 @@ error = function(e) e)
 
 ```{r}
 tryCatch(plot_timeseries(
-csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_groups/biomass/parrotfish_fk_bio.csv",
-title   = "Parrotfish biomass",
-y_label = "biomass",
+csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_groups/density/parrotfish_fk_den.csv",
+title   = "Parrotfish Density",
+y_label = "Density",
 skip    = 0,
 filter  = NULL,
 col_t   = "year",
-col_y   = "biomass"),
+col_y   = "density"),
 error = function(e) e)
 ```
 
 ```{r}
 tryCatch(plot_timeseries(
-csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_groups/biomass/parrotfish_fk_bio.csv",
-title   = "Parrotfish biomass",
-y_label = "biomass",
+csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_groups/diversity/parrotfish_fk_diversity.csv",
+title   = "Parrotfish Richness",
+y_label = "Species Richness",
 skip    = 0,
 filter  = NULL,
 col_t   = "year",
-col_y   = "biomass"),
+col_y   = "richness"),
 error = function(e) e)
 ```
 
 ```{r}
 tryCatch(plot_timeseries(
-csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_groups/biomass/parrotfish_fk_bio.csv",
-title   = "Parrotfish biomass",
-y_label = "biomass",
+csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_groups/diversity/parrotfish_fk_diversity.csv",
+title   = "Parrotfish Shannon Diversity",
+y_label = "Effective number of species",
 skip    = 0,
 filter  = NULL,
 col_t   = "year",
-col_y   = "biomass"),
+col_y   = "shannon"),
 error = function(e) e)
 ```
 
 ```{r}
 tryCatch(plot_timeseries(
-csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_groups/biomass/parrotfish_fk_bio.csv",
-title   = "Parrotfish biomass",
-y_label = "biomass",
+csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_groups/diversity/parrotfish_fk_diversity.csv",
+title   = "Parrotfish Simpson Diversity",
+y_label = "Effective number of species",
 skip    = 0,
 filter  = NULL,
 col_t   = "year",
-col_y   = "biomass"),
+col_y   = "simpson"),
 error = function(e) e)
 ```

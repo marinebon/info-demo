@@ -28,12 +28,12 @@ error = function(e) e)
 
 ```{r}
 tryCatch(plot_timeseries(
-csv_tv  = "https://github.com/mhepner90/RVC/blob/master/exploited_species/exploited_fk_bio.csv",
-title   = "Goliath Grouper biomass",
-y_label = "biomass",
+csv_tv  = "https://github.com/mhepner90/RVC/blob/master/exploited_species/exploited_fk_den.csv",
+title   = "Goliath Grouper Density",
+y_label = "Density",
 skip    = 0,
 filter  = "SPECIES_CD == \"EPI ITAJ\"",
 col_t   = "year",
-col_y   = "biomass"),
+col_y   = "density"),
 error = function(e) e)
 ```

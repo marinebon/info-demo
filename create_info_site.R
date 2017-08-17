@@ -1,3 +1,2 @@
-library(infographiq) # devtools::install_github('marinebon/infographiq')
-
-create_site(dir_root='.')
+# devtools::install_github('marinebon/infographiq')
+infographiq::create_info_site(render_modals = F)

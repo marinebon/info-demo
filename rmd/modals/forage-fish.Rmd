@@ -28,48 +28,48 @@ error = function(e) e)
 
 ```{r}
 tryCatch(plot_timeseries(
-csv_tv  = "https://raw.githubusercontent.com/mhepner90/RVC/master/SDG14/trophic_groups/biomass/forage_fk_bio_merged.csv",
-title   = "Forage fish biomass",
-y_label = "biomass",
+csv_tv  = "https://raw.githubusercontent.com/mhepner90/RVC/master/SDG14/trophic_groups/density/forage_fk_den_merged.csv",
+title   = "Forage fish Density",
+y_label = "Density",
 skip    = 0,
 filter  = NULL,
 col_t   = "YEAR",
-col_y   = "biomass"),
+col_y   = "density"),
 error = function(e) e)
 ```
 
 ```{r}
 tryCatch(plot_timeseries(
-csv_tv  = "https://raw.githubusercontent.com/mhepner90/RVC/master/SDG14/trophic_groups/biomass/forage_fk_bio_merged.csv",
-title   = "Forage fish biomass",
-y_label = "biomass",
+csv_tv  = "https://raw.githubusercontent.com/mhepner90/RVC/master/SDG14/trophic_groups/diversity/forage_fk_diversity_merged.csv",
+title   = "Forage fish Richness",
+y_label = "Species Richness",
 skip    = 0,
 filter  = NULL,
 col_t   = "YEAR",
-col_y   = "biomass"),
+col_y   = "richness"),
 error = function(e) e)
 ```
 
 ```{r}
 tryCatch(plot_timeseries(
-csv_tv  = "https://raw.githubusercontent.com/mhepner90/RVC/master/SDG14/trophic_groups/biomass/forage_fk_bio_merged.csv",
-title   = "Forage fish biomass",
-y_label = "biomass",
+csv_tv  = "https://raw.githubusercontent.com/mhepner90/RVC/master/SDG14/trophic_groups/diversity/forage_fk_diversity_merged.csv",
+title   = "Forage fish Shannon Diversity",
+y_label = "Effective number of species",
 skip    = 0,
 filter  = NULL,
 col_t   = "YEAR",
-col_y   = "biomass"),
+col_y   = "shannon"),
 error = function(e) e)
 ```
 
 ```{r}
 tryCatch(plot_timeseries(
-csv_tv  = "https://raw.githubusercontent.com/mhepner90/RVC/master/SDG14/trophic_groups/biomass/forage_fk_bio_merged.csv",
-title   = "Forage fish biomass",
-y_label = "biomass",
+csv_tv  = "https://raw.githubusercontent.com/mhepner90/RVC/master/SDG14/trophic_groups/diversity/forage_fk_diversity_merged.csv",
+title   = "Forage fish Simpson Diversity",
+y_label = "Effective number of species",
 skip    = 0,
 filter  = NULL,
 col_t   = "YEAR",
-col_y   = "biomass"),
+col_y   = "simpson"),
 error = function(e) e)
 ```

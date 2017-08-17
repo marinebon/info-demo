@@ -32,7 +32,7 @@ csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_level/tlbio.csv"
 title   = "Trophic Level",
 y_label = "Biomass",
 skip    = 0,
-filter  = "TL == 1",
+filter  = "TL == 2",
 col_t   = "year",
 col_y   = "biomass"),
 error = function(e) e)
@@ -44,7 +44,7 @@ csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_level/tlbio.csv"
 title   = "Trophic Level",
 y_label = "Biomass",
 skip    = 0,
-filter  = "TL == 1",
+filter  = "TL == 3",
 col_t   = "year",
 col_y   = "biomass"),
 error = function(e) e)
@@ -56,7 +56,7 @@ csv_tv  = "https://github.com/mhepner90/RVC/blob/master/trophic_level/tlbio.csv"
 title   = "Trophic Level",
 y_label = "Biomass",
 skip    = 0,
-filter  = "TL == 1",
+filter  = "TL == 4",
 col_t   = "year",
 col_y   = "biomass"),
 error = function(e) e)
