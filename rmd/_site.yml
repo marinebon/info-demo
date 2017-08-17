@@ -1,5 +1,5 @@
 name: "Florida Keys Infographics"
-output_dir: ../docs
+output_dir: "../docs"
 lib_dir: libs
 navbar:
   title: "Florida Keys Infographics"

@@ -5,8 +5,8 @@ title: "mangroves"
 <div id="scene"></div>
 
 <script>
-var svg = "mangroves.svgz";
-var svg_path = "svg/mangroves.svgz";
+var svg = "mangroves.svg";
+var svg_path = "svg/mangroves.svg";
 var svg_elements_csv = "svg_elements.csv";
 </script>
 
