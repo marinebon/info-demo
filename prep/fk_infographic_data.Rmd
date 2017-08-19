@@ -21,69 +21,109 @@ library(RColorBrewer)
 
 RVCdata_FK = read_rds("C:/Users/mhepn/Documents/RVC/big_csv/RVCdata_FK.rds") #473 MB
 
-domain_abun = read_csv("C:/Users/mhepn/Documents/RVC/big_csv/abundance_domain/domain_fk_abun.csv") #1.3 MB
-
-domain_biomass = read_csv("prep/data/domain_fk_biomass.csv")
-
-domain_density = read_csv("prep/data/domain_fk_density.csv")
+#domain_abun = read_csv("C:/Users/mhepn/Documents/RVC/big_csv/abundance_domain/domain_fk_abun.csv") #1307 KB
+#domain_biomass = read_csv("prep/data/domain_fk_biomass.csv") #1328 KB
+#domain_density = read_csv("prep/data/domain_fk_density.csv") #1257 KB
 
 ```
 
 ```{r forage fish}
 
-forage_fk_abun_csv     = "prep/data/forage_fk_abun.csv"        #abundance
-forage_fk_den_csv      = "prep/data/forage_fk_den.csv"           #density
-forage_fk_bio_csv      = "prep/data/forage_fk_bio_merged.csv"    #biomass 
-forage_fk_diversity_csv= "prep/data/forage_fk_diversity.csv"   #diversity 
-
-if (!all(file.exists(
+if(!all(file.exists("prep/data/rvc_trophic_groups/forage_abun.csv",
+                    "prep/data/rvc_trophic_groups/forage_den.csv",
+                    "prep/data/rvc_trophic_groups/forage_bio.csv"))){
+  
+  forage_fk_abun_csv     = "prep/data/forage_fk_abun.csv"        #abundance
+  forage_fk_den_csv      = "prep/data/forage_fk_den.csv"           #density
+  forage_fk_bio_csv      = "prep/data/forage_fk_bio_merged.csv"    #biomass 
+  forage_fk_diversity_csv= "prep/data/forage_fk_diversity.csv"   #diversity 
+  
+  if (!all(file.exists(
     forage_fk_abun_csv, forage_fk_den_csv, forage_fk_bio_csv,forage_fk_diversity_csv))){
-  
-  forage_fish_spp_list= c("HYP HARR", "ATH STIP", "JEN SPE.", "HAR JAGU", "ANC LYOL", "INE VITT", "HEM BRAS", "SAR AURI", "HAR HUME", "CHR ATHE")
-
-  #abundance
-  forage_fk_abun = getDomainAbundance(RVCdata_FK, forage_fish_spp_list)
-  write_csv(forage_fk_abun, "prep/data/rvc_trophic_groups/forage_fk_abun.csv")
- 
-  #density
-  forage_fk_den = getDomainDensity(RVCdata_FK, forage_fish_spp_list)
-  write_csv(forage_fk_den, "prep/data/rvc_trophic_groups/forage_fk_den.csv")
-  
-  #biomass
-  forage_fk_bio = getDomainBiomass(RVCdata_FK, forage_fish_spp_list, RVCdata_FK$taxonomic_data)
-  write_csv(forage_fk_bio, "prep/data/rvc_trophic_groups/forage_fk_bio_merged.csv")
- 
-  #fk diversity metrics 
-  forage_fk_abundance = forage_fk_abun %>% 
-    select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
-    group_by(YEAR, protected_status) %>% #48 groups 
-    nest(-YEAR) %>%  
-    mutate(
-      data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
-      #species richness 
-      richness = map(
-        data_wide, 
-        function(x) specnumber(x)),
-      #simpson diversity as effective number of species 
-      simpson = map( 
-        data_wide,
-        function(x) 1/(1 - diversity(x, index = 'simpson'))),
-      #shannon diversity as effective number of species 
-      shannon = map(
-        data_wide,
-        function(x) exp(diversity(x, index = 'shannon')))) %>%
-    unnest(richness, simpson, shannon)
-  
-  forage_fk_diversity = forage_fk_abundance %>%
-    select(YEAR, protected_status, richness, shannon, simpson) 
-  write_csv(forage_fk_diversity, "big_csv/trophic_groups/diversity/forage_fk_diversity.csv")
-} else{
-  forage_fk_abun = read_csv("prep/data/rvc_trophic_groups/forage_fk_abun.csv")
-  forage_fk_den = read_csv("prep/data/rvc_trophic_groups/forage_fk_den.csv")
-  forage_den = forage_fk_den %>%
-    mutate(var_den = var) %>%
-    select(density, var_den)
-  
-  forage_fk_bio = read_csv("prep/data/rvc_trophic_groups/forage_fk_bio_merged.csv")
+    
+    forage_fish_spp_list= c("HYP HARR", "ATH STIP", "JEN SPE.", "HAR JAGU", "ANC LYOL", "INE VITT", "HEM BRAS", "SAR AURI", "HAR HUME", "CHR ATHE")
+    
+    #abundance
+    forage_fk_abun = getDomainAbundance(RVCdata_FK, forage_fish_spp_list)
+    write_csv(forage_fk_abun, "prep/data/rvc_trophic_groups/forage_fk_abun.csv")
+    
+    #density
+    forage_fk_den = getDomainDensity(RVCdata_FK, forage_fish_spp_list)
+    write_csv(forage_fk_den, "prep/data/rvc_trophic_groups/forage_fk_den.csv")
+    
+    #biomass
+    forage_fk_bio = getDomainBiomass(RVCdata_FK, forage_fish_spp_list, RVCdata_FK$taxonomic_data)
+    write_csv(forage_fk_bio, "prep/data/rvc_trophic_groups/forage_fk_bio_merged.csv")
+    
+    #fk diversity metrics 
+    forage_fk_abundance = forage_fk_abun %>% 
+      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+      group_by(YEAR, protected_status) %>% #48 groups 
+      nest(-YEAR) %>%  
+      mutate(
+        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+        #species richness 
+        richness = map(
+          data_wide, 
+          function(x) specnumber(x)),
+        #simpson diversity as effective number of species 
+        simpson = map( 
+          data_wide,
+          function(x) 1/(1 - diversity(x, index = 'simpson'))),
+        #shannon diversity as effective number of species 
+        shannon = map(
+          data_wide,
+          function(x) exp(diversity(x, index = 'shannon')))) %>%
+      unnest(richness, simpson, shannon)
+    
+    forage_fk_diversity = forage_fk_abundance %>%
+      select(YEAR, protected_status, richness, shannon, simpson) 
+    write_csv(forage_fk_diversity, "prep/data/rvc_trophic_groups/forage_fk_diversity.csv")
+    
+  } else{
+    
+    forage_fk_abun = read_csv("prep/data/rvc_trophic_groups/forage_fk_abun.csv")
+    forage_abun = forage_fk_abun %>%
+      group_by(YEAR) %>%
+      summarize(
+        abundance_mean = mean(abundance),
+        abundance_n = length(abundance),
+        abundance_sd = sd(abundance),
+        abundance_se = abundance_sd / sqrt(abundance_n),
+        abundance_min = min(abundance),
+        abundance_max = max(abundance))
+    write_csv(forage_abun, "prep/data/rvc_trophic_groups/forage_abun.csv")
+    
+    forage_fk_den = read_csv("prep/data/rvc_trophic_groups/forage_fk_den.csv")
+    forage_den = forage_fk_den %>%
+      group_by(YEAR) %>%
+      summarize(
+        density_mean = mean(density),
+        density_n = length(density),
+        density_sd = sd(density),
+        density_se = density_sd / sqrt(density_n),
+        density_min = min(density),
+        density_max = max(density))
+    write_csv(forage_den, "prep/data/rvc_trophic_groups/forage_den.csv")
+    
+    forage_fk_bio = read_csv("prep/data/rvc_trophic_groups/forage_fk_bio_merged.csv")
+    forage_bio = forage_fk_bio %>%
+      group_by(YEAR) %>%
+      summarize(
+        biomass_mean = mean(biomass),
+        biomass_n = length(biomass),
+        biomass_sd = sd(biomass),
+        biomass_se = biomass_sd / sqrt(biomass_n),
+        biomass_min = min(biomass),
+        biomass_max = max(biomass))
+    write_csv(forage_bio, "prep/data/rvc_trophic_groups/forage_bio.csv")
+    
+    forage_fk_diveristy = read_csv("prep/data/rvc_trophic_groups/forage_fk_diversity.csv") 
+    forage_div = forage_fk_diveristy %>%
+      filter(protected_status != "0") %>%
+      filter(protected_status != "1") %>%
+      select(YEAR, richness, shannon, simpson)
+    write_csv(forage_div, "prep/data/rvc_trophic_groups/forage_div.csv")
+  }
 }
 
