@@ -727,7 +727,7 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/jacks_abun.csv",
     #abundance
     opportunists_abun = read_csv("prep/data/rvc_trophic_groups/hogfish_fk_abun.csv")
     
-    opportunists_abun = opportunists_fk_abun %>%
+    opportunists_abundance = opportunists_abun %>%
       group_by(YEAR) %>%
       summarize(
         abundance_mean = mean(abundance),
@@ -736,7 +736,7 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/jacks_abun.csv",
         abundance_se = abundance_sd / sqrt(abundance_n),
         abundance_min = min(abundance),
         abundance_max = max(abundance))
-    write_csv(opportunists_abun, "prep/data/rvc_trophic_groups/opportunists_abun.csv")
+    write_csv(opportunists_abundance, "prep/data/rvc_trophic_groups/opportunists_abun.csv")
     
     #biomass
     opportunists_bio = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_bio_merged.csv")
@@ -751,7 +751,6 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/jacks_abun.csv",
         biomass_min = min(biomass),
         biomass_max = max(biomass))
     write_csv(opportunists_biomass, "prep/data/rvc_trophic_groups/opportunists_bio.csv")
-    
     
     #density
     opportunists_den = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_den.csv")
@@ -1389,7 +1388,7 @@ if(!file.exists("prep/data/rvc_trophic_level/trophic_level_biomass.csv")){
   
   trophic_levels = read_csv('prep/data/rvc_trophic_level/RVC_trophic_level.csv')
   
-  trophic_level = trophic_levels %>%
+  trophic_levels = trophic_levels %>%
     select(RVC_CODE, Trophic_Level) %>%  #391 species 
     mutate(
       TL = # 3 trophic levels 
@@ -1403,16 +1402,23 @@ if(!file.exists("prep/data/rvc_trophic_level/trophic_level_biomass.csv")){
   trophic_level_bio = getDomainBiomass(RVCdata_FK, trophic_level$RVC_CODE, RVCdata_FK$taxonomic_data)
   write_csv(trophic_level_bio, "prep/data/rvc_trophic_level/trophic_level_bio.csv")
   
-  trophic_level_bio = trophic_level_bio %>%
-  select(YEAR, biomass, SPECIES_CD) %>% 
-  left_join(trophic_level, trophic_level_bio, by = 'SPECIES_CD') %>% 
-  #trophic_level_biomass = trophic_level_bio %>% 
-  group_by(YEAR, TL) %>%
-  summarise(
-  ntot = sum(biomass)) %>% 
-  spread(TL, ntot)
+  trophic_level_biomass = read_csv("prep/data/rvc_trophic_level/trophic_level_bio.csv")
   
-  write_csv(trophic_level_bio, "prep/data/rvc_trophic_level/trophic_level_biomass")
+  trophic_level = trophic_level_biomass %>%
+    select(YEAR, biomass, SPECIES_CD) %>% 
+    left_join(trophic_levels, trophic_level_biomass, by = 'SPECIES_CD')
+  
+  trophic_level = trophic_level %>%
+    group_by(YEAR, TL) %>%
+    summarise(
+        biomass_mean = mean(biomass),
+        biomass_n = length(biomass),
+        biomass_sd = sd(biomass),
+        biomass_se = biomass_sd / sqrt(biomass_n),
+        biomass_min = min(biomass),
+        biomass_max = max(biomass))
+  
+  write_csv(trophic_level, "prep/data/rvc_trophic_level/trophic_level.csv")
   
 }
 
@@ -1551,9 +1557,9 @@ if(!file.exists("prep/data/domain_div.csv")){
   domain_abun = read_csv("C:/Users/mhepn/Documents/RVC/big_csv/abundance_domain/domain_fk_abun.csv") #1307 KB
 
   domain_div = domain_abun %>%
-    filter(protected_status == "all") %>%
-    select(YEAR, SPECIES_CD, abundance) %>%
-    group_by(YEAR) %>%
+    filter(protected_status != "all") %>%
+    select(YEAR, SPECIES_CD, abundance, protected_status) %>%
+    group_by(YEAR, protected_status) %>%
     nest(-YEAR) %>%
     mutate(
       data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill =0)),
@@ -1563,7 +1569,7 @@ if(!file.exists("prep/data/domain_div.csv")){
     unnest(richness, simpson, shannon)
 
   domain_div = domain_div %>%
-    select(YEAR, richness, simpson, shannon)
+    select(YEAR, protected_status, richness, simpson, shannon)
 
   write_csv(domain_div, "prep/data/domain_div.csv")
 }
