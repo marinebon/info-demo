@@ -31,7 +31,8 @@ RVCdata_FK = read_rds("C:/Users/mhepn/Documents/RVC/big_csv/RVCdata_FK.rds") #47
 
 if(!all(file.exists("prep/data/rvc_trophic_groups/forage_abun.csv",
                     "prep/data/rvc_trophic_groups/forage_den.csv",
-                    "prep/data/rvc_trophic_groups/forage_bio.csv"))){
+                    "prep/data/rvc_trophic_groups/forage_bio.csv",
+                    "prep/data/rvc_trophic_groups/forage_div.csv"))){
   
   forage_fk_abun_csv     = "prep/data/forage_fk_abun.csv"        #abundance
   forage_fk_den_csv      = "prep/data/forage_fk_den.csv"           #density
@@ -126,4 +127,1080 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/forage_abun.csv",
     write_csv(forage_div, "prep/data/rvc_trophic_groups/forage_div.csv")
   }
 }
+```
 
+- grouper
+- snapper 
+- hogfish
+- seabass and hamlets 
+
+```{r grouper-snapper complex}
+
+if(!all(file.exists("prep/data/rvc_trophic_groups/grouper_snapper_abun.csv",
+                    "prep/data/rvc_trophic_groups/grouper_snapper_den.csv",
+                    "prep/data/rvc_trophic_groups/grouper_snapper_bio.csv"))){
+  
+  grouper_fk_abun_csv       = "prep/data/rvc_trophic_groups/grouper_fk_abun.csv"
+  grouper_fk_den_csv        = "prep/data/rvc_trophic_groups/grouper_fk_den.csv"
+  grouper_fk_bio_csv        = "prep/data/rvc_trophic_groups/grouper_fk_bio_merged.csv"
+  grouper_fk_diversity_csv  = "prep/data/rvc_trophic_groups/grouper_fk_diversity.csv"
+  hogfish_fk_abun_csv       = "prep/data/rvc_trophic_groups/hogfish_fk_abun.csv"
+  hogfish_fk_den_csv        = "prep/data/rvc_trophic_groups/hogfish_fk_den.csv"
+  hogfish_fk_bio_csv        = "prep/data/rvc_trophic_groups/hogfish_fk_bio_merged.csv"
+  seabass_fk_abun_csv       = "prep/data/rvc_trophic_groups/seabass_fk_abun.csv"
+  seabass_fk_den_csv        = "prep/data/rvc_trophic_groups/seabass_fk_den.csv"
+  seabass_fk_bio_csv        = "prep/data/rvc_trophic_groups/seabass_fk_bio_merged.csv"
+  seabass_fk_diversity_csv  = "prep/data/rvc_trophic_groups/seabass_fk_diversity.csv"
+  snapper_fk_abun_csv       = "prep/data/rvc_trophic_groups/snapper_fk_abun.csv"
+  snapper_fk_den_csv        = "prep/data/rvc_trophic_groups/snapper_fk_den.csv"
+  snapper_fk_bio_csv        = "prep/data/rvc_trophic_groups/snapper_fk_bio_merged.csv"
+  snapper_fk_diversity_csv  = "prep/data/rvc_trophic_groups/snapper_fk_diversity.csv"
+  
+  if (!all(file.exists(grouper_fk_abun_csv,
+                       grouper_fk_den_csv,grouper_fk_bio_csv,grouper_fk_diversity_csv,
+                       hogfish_fk_abun_csv,hogfish_fk_den_csv,hogfish_fk_bio_csv,
+                       seabass_fk_abun_csv,seabass_fk_den_csv,seabass_fk_bio_csv,seabass_fk_diversity_csv,
+                       snapper_fk_abun_csv,snapper_fk_den_csv,snapper_fk_bio_csv,snapper_fk_diversity_csv))){
+    
+  grouper_spp_list= c("CEP CRUE", "MYC BONA", "EPI MORI", "EPI STRI", "EPI ITAJ", "CEP FULV", "MYC MICR", "MYC PHEN", "MYC VENE", "MYC INTE", "MYC TIGR", "EPI FLAV", "DER INER", "SRR SPE.", "Epi nive", "Myc acut")
+  #abundance
+  grouper_fk_abun = getDomainAbundance(RVCdata_FK, grouper_spp_list)
+  write_csv(grouper_fk_abun, "prep/data/rvc_trophic_groups/grouper_fk_abun.csv")
+  
+  #density
+  grouper_fk_den = getDomainDensity(RVCdata_FK, grouper_spp_list)
+  write_csv(grouper_fk_den, "prep/data/rvc_trophic_groups/grouper_fk_den.csv")
+  
+  #biomass
+  grouper_fk_bio = getDomainBiomass(RVCdata_FK, grouper_spp_list, RVCdata_FK$taxonomic_data)
+  write_csv(grouper_fk_bio, "prep/data/rvc_trophic_groups/grouper_fk_bio_merged.csv")
+  
+  #diversity metrics 
+  grouper_fk_abundance = grouper_fk_abun %>% 
+    select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+    group_by(YEAR, protected_status) %>% 
+    nest(-YEAR) %>%  
+    mutate(
+      data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill =0)), 
+      #species richness 
+      richness = map(
+        data_wide, 
+        function(x) specnumber(x)),
+      #simpson diversity as effective number of species 
+      simpson = map( 
+        data_wide,
+        function(x) 1/(1 - diversity(x, index = 'simpson'))),
+      #shannon diversity as effective number of species 
+      shannon = map(
+        data_wide,
+        function(x) exp(diversity(x, index = 'shannon')))) %>%
+    unnest(richness, simpson, shannon)
+  
+  grouper_fk_diversity = grouper_fk_abundance %>%
+    select(YEAR, protected_status, richness, shannon, simpson) 
+  write_csv(grouper_fk_diversity, "prep/data/rvc_trophic_groups/grouper_fk_diversity.csv")
+  
+  hogfish_spp_list = c("LAC MAXI", "BOD RUFU", "BOD PULC")
+  
+  #abundance
+  hogfish_fk_abun = getDomainAbundance(RVCdata_FK, hogfish_spp_list, merge_protected = F)
+  write_csv(hogfish_fk_abun, "prep/data/rvc_trophic_groups/hogfish_fk_abun.csv")
+  
+  #density
+  hogfish_fk_den = getDomainDensity(RVCdata_FK, hogfish_spp_list, merge_protected = F)
+  write_csv(hogfish_fk_den, "prep/data/rvc_trophic_groups/hogfish_fk_den.csv")
+  
+  #biomass
+  hogfish_fk_bio = getDomainBiomass(RVCdata_FK, hogfish_spp_list, RVCdata_FK$taxonomic_data)
+  write_csv(hogfish_fk_bio, "prep/data/rvc_trophic_groups/hogfish_fk_bio_merged.csv")
+  
+  #FK diversity
+  hogfish_fk_abundance = hogfish_fk_abun %>% 
+    select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+    group_by(YEAR, protected_status) %>% #48 groups 
+    nest(-YEAR) %>%  
+    mutate(
+      data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+      #species richness 
+      richness = map(
+        data_wide, 
+        function(x) specnumber(x)),
+      #simpson diversity as effective number of species 
+      simpson = map( 
+        data_wide,
+        function(x) 1/(1 - diversity(x, index = 'simpson'))),
+      #shannon diversity as effective number of species 
+      shannon = map(
+        data_wide,
+        function(x) exp(diversity(x, index = 'shannon')))) %>%
+    unnest(richness, simpson, shannon)
+  
+  hogfish_fk_diversity = hogfish_fk_abundance %>%
+    select(YEAR, protected_status, richness, simpson, shannon) 
+  write_csv(hogfish_fk_diversity, "prep/data/rvc_trophic_groups/hogfish_fk_diversity.csv")
+  
+  sea_bass_hamlet_spp_list = c("SER TIGR","HYP GEMM","HYP UNIC","SER TABA","SER BALD","HYP PUEL","EPI ADSC","SER TORT","EPI GUTT","HYP NIGR","DIP FORM","HYP SPE.","SCH BETA","HYP TANN", "RYP SAPO","PAR FURC","HYP INDI","HYP GUTT","ALP AFER","LIO EUKR","SER ANNU","LIO RUBE","HYP HYBR","HYP CHLO","PRI AQUI","RYP MACU","SER SUBL","CEN OCYU","CEN STRI","Epi drum","Lio mowb")
+  
+  #abundance
+  seabass_fk_abun = getDomainAbundance(RVCdata_FK, sea_bass_hamlet_spp_list, merge_protected = F)
+  write_csv(seabass_fk_abun, "prep/data/rvc_trophic_groups/seabass_fk_abun.csv")
+  
+  #density
+  seabass_fk_den = getDomainDensity(RVCdata_FK, sea_bass_hamlet_spp_list, merge_protected = F)
+  write_csv(seabass_fk_den, "prep/data/rvc_trophic_groups/seabass_fk_den.csv")
+  
+  #biomass
+  seabass_fk_bio = getDomainBiomass(RVCdata_FK, sea_bass_hamlet_spp_list,RVCdata_FK$taxonomic_data)
+  write_csv(seabass_fk_bio, "prep/data/rvc_trophic_groups/seabass_fk_bio_merged.csv")
+  
+  #diversity
+  seabass_fk_abundance = seabass_fk_abun %>% 
+    select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+    group_by(YEAR, protected_status) %>% #48 groups 
+    nest(-YEAR) %>%  
+    mutate(
+      data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+      #species richness 
+      richness = map(
+        data_wide, 
+        function(x) specnumber(x)),
+      #simpson diversity as effective number of species 
+      simpson = map( 
+        data_wide,
+        function(x) 1/(1 - diversity(x, index = 'simpson'))),
+      #shannon diversity as effective number of species 
+      shannon = map(
+        data_wide,
+        function(x) exp(diversity(x, index = 'shannon')))) %>%
+    unnest(richness, simpson, shannon)
+  
+  seabass_fk_diversity = seabass_fk_abundance %>%
+    select(YEAR, protected_status, richness, simpson, shannon) 
+  write_csv(seabass_fk_diversity, "prep/data/rvc_trophic_groups/seabass_fk_diversity.csv")
+  
+  snapper_spp_list = c("OCY CHRY", "LUT GRIS", "LUT ANAL", "LUT APOD", "LUT SYNA", "LUT MAHO", "LUT JOCU", "LUT BUCC", 'LUT SPE.', "LUT CYAN", "RHO AURO", "Lut camp")
+  
+  #abundance
+  snapper_fk_abun = getDomainAbundance(RVCdata_FK, snapper_spp_list, merge_protected = F)
+  write_csv(snapper_fk_abun, "prep/data/rvc_trophic_groups/snapper_fk_abun.csv")
+  
+  #density
+  snapper_fk_den = getDomainDensity(RVCdata_FK, snapper_spp_list, merge_protected = F)
+  write_csv(snapper_fk_den, "prep/data/rvc_trophic_groups/snapper_fk_den.csv")
+  
+  #biomass
+  snapper_fk_bio = getDomainBiomass(RVCdata_FK, snapper_spp_list, RVCdata_FK$taxonomic_data)
+  write_csv(snapper_fk_bio, "prep/data/rvc_trophic_groups/snapper_fk_bio_merged.csv")
+  
+  #diversity
+  snapper_fk_abundance = snapper_fk_abun %>% 
+    select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+    group_by(YEAR, protected_status) %>% #48 groups 
+    nest(-YEAR) %>%  
+    mutate(
+      data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+      #species richness 
+      richness = map(
+        data_wide, 
+        function(x) specnumber(x)),
+      #simpson diversity as effective number of species 
+      simpson = map( 
+        data_wide,
+        function(x) 1/(1 - diversity(x, index = 'simpson'))),
+      #shannon diversity as effective number of species 
+      shannon = map(
+        data_wide,
+        function(x) exp(diversity(x, index = 'shannon')))) %>%
+    unnest(richness, simpson, shannon)
+  
+  snapper_fk_diversity = snapper_fk_abundance %>%
+    select(YEAR, protected_status, richness, simpson, shannon) 
+  write_csv(snapper_fk_diversity, "prep/data/rvc_trophic_groups/snapper_fk_diversity.csv")
+  
+  }
+  
+  #abundance data 
+  snapper_abun = read_csv("prep/data/rvc_trophic_groups/snapper_fk_abun.csv")
+  seabass_abun = read_csv("prep/data/rvc_trophic_groups/seabass_fk_abun.csv")
+  hogfish_abun = read_csv("prep/data/rvc_trophic_groups/hogfish_fk_abun.csv")
+  grouper_abun = read_csv("prep/data/rvc_trophic_groups/grouper_fk_abun.csv")
+  
+  snapper_grouper_abun = rbind(snapper_abun,seabass_abun,hogfish_abun,grouper_abun) #1999-2016 
+  
+  snapper_grouper_abun = snapper_grouper_abun %>%
+  group_by(YEAR) %>%
+      summarize(
+        abundance_mean = mean(abundance),
+        abundance_n = length(abundance),
+        abundance_sd = sd(abundance),
+        abundance_se = abundance_sd / sqrt(abundance_n),
+        abundance_min = min(abundance),
+        abundance_max = max(abundance))
+    write_csv(snapper_grouper_abun, "prep/data/rvc_trophic_groups/snapper_grouper_abun.csv")
+    
+  #biomass data 
+  snapper_bio = read_csv("prep/data/rvc_trophic_groups/snapper_fk_bio_merged.csv")
+  seabass_bio = read_csv("prep/data/rvc_trophic_groups/seabass_fk_bio_merged.csv")
+  hogfish_bio = read_csv("prep/data/rvc_trophic_groups/hogfish_fk_bio_merged.csv")
+  grouper_bio = read_csv("prep/data/rvc_trophic_groups/grouper_fk_bio_merged.csv")
+  
+  snapper_grouper_bio = rbind(snapper_bio,seabass_bio,hogfish_bio,grouper_bio) #1999-2016 
+  
+  snapper_grouper_bio = snapper_grouper_bio %>%
+      group_by(YEAR) %>%
+      summarize(
+        biomass_mean = mean(biomass),
+        biomass_n = length(biomass),
+        biomass_sd = sd(biomass),
+        biomass_se = biomass_sd / sqrt(biomass_n),
+        biomass_min = min(biomass),
+        biomass_max = max(biomass))
+    write_csv(snapper_grouper_bio, "prep/data/rvc_trophic_groups/snapper_grouper_bio.csv")
+
+  #density data 
+  snapper_den = read_csv("prep/data/rvc_trophic_groups/snapper_fk_den.csv")
+  seabass_den = read_csv("prep/data/rvc_trophic_groups/seabass_fk_den.csv")
+  hogfish_den = read_csv("prep/data/rvc_trophic_groups/hogfish_fk_den.csv")
+  grouper_den = read_csv("prep/data/rvc_trophic_groups/grouper_fk_den.csv")
+  
+  snapper_grouper_den = rbind(snapper_den,seabass_den,hogfish_den,grouper_den) #1999-2016 
+  
+  snapper_grouper_den = snapper_grouper_den %>%
+      group_by(YEAR) %>%
+      summarize(
+        density_mean = mean(density),
+        density_n = length(density),
+        density_sd = sd(density),
+        density_se = density_sd / sqrt(density_n),
+        density_min = min(density),
+        density_max = max(density))
+    write_csv(snapper_grouper_den, "prep/data/rvc_trophic_groups/snapper_grouper_den.csv")
+    
+  #diversity data 
+  snapper_diversity = read_csv("prep/data/rvc_trophic_groups/snapper_fk_diversity.csv")
+  seabass_diversity = read_csv("prep/data/rvc_trophic_groups/seabass_fk_diversity.csv")
+  hogfish_diversity = read_csv("prep/data/rvc_trophic_groups/hogfish_fk_diversity.csv")
+  grouper_diversity = read_csv("prep/data/rvc_trophic_groups/grouper_fk_diversity.csv")
+  
+  snapper_grouper_diversity = rbind(snapper_diversity,seabass_diversity,hogfish_diversity,grouper_diversity) #1999-2016 
+  
+  snapper_grouper_diversity = snapper_grouper_diversity %>%
+    filter(protected_status != "0") %>%
+    filter(protected_status != "1") %>%
+    group_by(YEAR) %>%
+    summarize(
+      richness_mean = mean(richness),
+      richness_n = length(richness),
+      richness_sd = sd(richness),
+      richness_se = richness_sd / sqrt(richness_n),
+      richness_min = min(richness),
+      richness_max = max(richness),
+      simpson_mean = mean(simpson),
+      simpson_n = length(simpson),
+      simpson_sd = sd(simpson),
+      simpson_se = simpson_sd / sqrt(simpson_n),
+      simpson_min = min(simpson),
+      simpson_max = max(simpson),
+      shannon_mean = mean(shannon),
+      shannon_n = length(shannon),
+      shannon_sd = sd(shannon),
+      shannon_se = shannon_sd / sqrt(shannon_n),
+      shannon_min = min(shannon),
+      shannon_max = max(shannon))
+  
+    write_csv(snapper_grouper_diversity, "prep/data/rvc_trophic_groups/snapper_grouper_diversity.csv")  
+}
+  
+```
+
+- parrotfish 
+
+```{r parrotfish}
+
+if(!all(file.exists("prep/data/rvc_trophic_groups/parrotfish_abun.csv",
+                    "prep/data/rvc_trophic_groups/parrotfish_den.csv",
+                    "prep/data/rvc_trophic_groups/parrotfish_bio.csv",
+                    "prep/data/rvc_trophic_groups/parrotfish_div.csv"))){
+  
+  parrotfish_fk_abun_csv     = "prep/data/parrotfish_fk_abun.csv"        #abundance
+  parrotfish_fk_den_csv      = "prep/data/parrotfish_fk_den.csv"           #density
+  parrotfish_fk_bio_csv      = "prep/data/parrotfish_fk_bio_merged.csv"    #biomass 
+  parrotfish_fk_diversity_csv= "prep/data/parrotfish_fk_diversity.csv"   #diversity 
+  
+  }else{
+    if (!all(file.exists(
+    parrotfish_fk_abun_csv, 
+    parrotfish_fk_den_csv, 
+    parrotfish_fk_bio_csv,
+    parrotfish_fk_diversity_csv))){
+    
+    parrotfish_spp_list = c('SCA ISER', "SCA COEL", "SPA AURO", "SPA VIRI", "SPA ATOM", "SCA TAEN", 'SPA RUBR', "SPA CHRY", "SCA VETU", "SCA COER", "SCA GUAC", "CRY ROSE", "SPA RADI", "SCA SPE.", "NIC USTA", "SPA SPE.")
+  
+    #abundance
+    parrotfish_fk_abun = getDomainAbundance(RVCdata_FK, parrotfish_spp_list, merge_protected = F)
+    write_csv(parrotfish_fk_abun, "prep/data/rvc_trophic_groups/parrotfish_fk_abun.csv")
+  
+    #density
+    parrotfish_fk_den = getDomainDensity(RVCdata_FK, parrotfish_spp_list, merge_protected = F)
+    write_csv(parrotfish_fk_den, "prep/data/rvc_trophic_groups/parrotfish_fk_den.csv")
+  
+    #biomass
+    parrotfish_fk_bio = getDomainBiomass(RVCdata_FK, parrotfish_spp_list, RVCdata_FK$taxonomic_data)
+    write_csv(parrotfish_fk_bio, "prep/data/rvc_trophic_groups/parrotfish_fk_bio_merged.csv")
+  
+    #diversity
+    parrotfish_fk_abundance = parrotfish_fk_abun %>% 
+      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+      group_by(YEAR, protected_status) %>% #48 groups 
+      nest(-YEAR) %>%  
+      mutate(
+        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+        #species richness 
+        richness = map(
+          data_wide, 
+          function(x) specnumber(x)),
+        #simpson diversity as effective number of species 
+        simpson = map( 
+          data_wide,
+          function(x) 1/(1 - diversity(x, index = 'simpson'))),
+        #shannon diversity as effective number of species 
+        shannon = map(
+          data_wide,
+          function(x) exp(diversity(x, index = 'shannon')))) %>%
+      unnest(richness, simpson, shannon)
+  
+    parrotfish_fk_diversity = parrotfish_fk_abundance %>%
+      select(YEAR, protected_status, richness, simpson, shannon) 
+    write_csv(parrotfish_fk_diversity, "prep/data/rvc_trophic_groups/parrotfish_fk_diversity.csv")
+  
+    }else{
+    
+    parrotfish_abun = read_csv("prep/data/rvc_trophic_groups/parrotfish_fk_abun.csv")
+    parrotfish_abun = parrotfish_abun %>%
+      group_by(YEAR) %>%
+      summarize(
+        abundance_mean = mean(abundance),
+        abundance_n = length(abundance),
+        abundance_sd = sd(abundance),
+        abundance_se = abundance_sd / sqrt(abundance_n),
+        abundance_min = min(abundance),
+        abundance_max = max(abundance))
+    write_csv(parrotfish_abun, "prep/data/rvc_trophic_groups/parrotfish_abun.csv")
+    
+    parrotfish_den = read_csv("prep/data/rvc_trophic_groups/parrotfish_fk_den.csv")
+    parrotfish_den = parrotfish_den %>%
+      group_by(YEAR) %>%
+      summarize(
+        density_mean = mean(density),
+        density_n = length(density),
+        density_sd = sd(density),
+        density_se = density_sd / sqrt(density_n),
+        density_min = min(density),
+        density_max = max(density))
+    write_csv(parrotfish_den, "prep/data/rvc_trophic_groups/parrotfish_den.csv")
+    
+    parrotfish_bio = read_csv("prep/data/rvc_trophic_groups/parrotfish_fk_bio_merged.csv")
+    parrotfish_bio = parrotfish_bio %>%
+      group_by(YEAR) %>%
+      summarize(
+        biomass_mean = mean(biomass),
+        biomass_n = length(biomass),
+        biomass_sd = sd(biomass),
+        biomass_se = biomass_sd / sqrt(biomass_n),
+        biomass_min = min(biomass),
+        biomass_max = max(biomass))
+    write_csv(parrotfish_bio, "prep/data/rvc_trophic_groups/parrotfish_bio.csv")
+    
+    parrotfish_diveristy = read_csv("prep/data/rvc_trophic_groups/parrotfish_fk_diversity.csv") 
+    parrotfish_div = parrotfish_diveristy %>%
+      filter(protected_status != "0") %>%
+      filter(protected_status != "1") %>%
+      select(YEAR, richness, shannon, simpson)
+    write_csv(parrotfish_div, "prep/data/rvc_trophic_groups/parrotfish_div.csv")
+}
+
+```
+
+- grunt
+- higher level reef fish
+- small reef reef fish 
+- opportunists 
+
+```{r grunt etc.}
+
+if(!all(file.exists("prep/data/rvc_trophic_groups/grunt_etc_abun.csv",
+                    "prep/data/rvc_trophic_groups/grunt_etc_den.csv",
+                    "prep/data/rvc_trophic_groups/grunt_etc_bio.csv",
+                    "prep/data/rvc_trophic_groups/grunt_etc_div.csv"))){
+  
+  grunt_fk_abun_csv             = "prep/data/rvc_trophic_groups/grunt_fk_abun.csv"
+  grunt_fk_den_csv              = "prep/data/rvc_trophic_groups/grunt_fk_den.csv"
+  grunt_fk_bio_csv              = "prep/data/rvc_trophic_groups/grunt_fk_bio_merged.csv"
+  grunt_fk_diversity_csv        = "prep/data/rvc_trophic_groups/grunt_fk_diversity.csv"
+  higher_reef_fk_abun_csv       = "prep/data/rvc_trophic_groups/higher_reef_fk_abun.csv"
+  higher_reef_fk_den_csv        = "prep/data/rvc_trophic_groups/higher_reef_fk_den.csv"
+  higher_reef_fk_bio_csv        = "prep/data/rvc_trophic_groups/higher_reef_fk_bio_merged.csv"
+  higher_reef_fk_diversity_csv  = "prep/data/rvc_trophic_groups/higher_reef_fk_diversity.csv"
+  small_reef_fk_abun_csv        = "prep/data/rvc_trophic_groups/small_reef_fk_abun.csv"
+  small_reef_fk_den_csv         = "prep/data/rvc_trophic_groups/small_reef_fk_den.csv"
+  small_reef_fk_bio_csv         = "prep/data/rvc_trophic_groups/small_reef_fk_bio_merged.csv"
+  small_reef_fk_diversity_csv   = "prep/data/rvc_trophic_groups/small_reef_fk_diversity.csv"
+  opportunists_fk_abun_csv      = "prep/data/rvc_trophic_groups/opportunists_fk_abun.csv"
+  opportunists_fk_den_csv       = "prep/data/rvc_trophic_groups/opportunists_fk_den.csv"
+  opportunists_fk_bio_csv       = "prep/data/rvc_trophic_groups/opportunists_fk_den_merged.csv"
+  opportunists_fk_diversity_csv = "prep/data/rvc_trophic_groups/opportunists_fk_diversity.csv"
+  
+  
+  
+  if(!all(file.exists(grunt_fk_abun_csv,grunt_fk_den_csv,grunt_fk_bio_csv,grunt_fk_diversity_csv,
+                      higher_reef_fk_abun_csv,higher_reef_fk_den_csv,higher_reef_fk_bio_csv,higher_reef_fk_diversity_csv,
+                      small_reef_fk_abun_csv,small_reef_fk_den_csv,small_reef_fk_bio_csv,small_reef_fk_diversity_csv,
+                      opportunists_fk_abun_csv,opportunists_fk_den_csv,opportunists_fk_bio_csv,opportunists_fk_diversity_csv))){
+    
+    grunt_spp_list = c("HAE SCIU", "HAE AURO", "HAE PLUM", "HAE SPE.", "HAE FLAV", "HAE CHRY", "ANI VIRG","HAE MELA", "HAE CARB", "HAE PARR", "HAE STRI", "HAE MACR", "ANI SURI", "HAE ALBU")
+    
+    #abundance
+    grunt_fk_abun = getDomainAbundance(RVCdata_FK, grunt_spp_list)
+    write_csv(grunt_fk_abun, "prep/data/rvc_trophic_groups/grunt_fk_abun.csv")
+    
+    #density
+    grunt_fk_den = getDomainDensity(RVCdata_FK, grunt_spp_list)
+    write_csv(grunt_fk_den, "prep/data/rvc_trophic_groups/grunt_fk_den.csv")
+    
+    #biomass
+    grunt_fk_bio = getDomainBiomass(RVCdata_FK, grunt_spp_list, RVCdata_FK$taxonomic_data)
+    write_csv(grunt_fk_bio, "prep/data/rvc_trophic_groups/grunt_fk_bio_merged.csv")
+    
+    #diversity metrics 
+    grunt_fk_abundance = grunt_fk_abun %>% 
+      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+      group_by(YEAR, protected_status) %>% #48 groups 
+      nest(-YEAR) %>%  
+      mutate(
+        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+        #species richness 
+        richness = map(
+          data_wide, 
+          function(x) specnumber(x)),
+        #simpson diversity as effective number of species 
+        simpson = map( 
+          data_wide,
+          function(x) 1/(1 - diversity(x, index = 'simpson'))),
+        #shannon diversity as effective number of species 
+        shannon = map(
+          data_wide,
+          function(x) exp(diversity(x, index = 'shannon')))) %>%
+      unnest(richness, simpson, shannon)
+    
+    grunt_fk_diversity = grunt_fk_abundance %>%
+      select(YEAR, protected_status, richness, simpson, shannon) 
+    write_csv(grunt_fk_diversity, "prep/data/rvc_trophic_groups/grunt_fk_diversity.csv")
+    
+    higher_reef_spp_list = c("THA BIFA","STE PART","GYM MORI","PRI AREN","ABU SAXA","HAL BIVI","HAL GARN","HAL MACU","CHR MULT","CLE PARR","STE PLAN","CHR CYAN","MUL MART","MIC CHRY","STE ADUS","CHA CAPI","STE VARI","PEM SCHO","POM ARCU","CAN ROST","CHA OCEL","PSE MACU","HOL TRIC","CHR SCOT","HAL RADI","CAL CALA","CHA SEDE","XYR SPLE","STE LEUC","HOL CILI","POM PARU","AUL MACU","CHA STRI","OPI AURI","HAL POEY","CHR INSO","HOL ADSC","ODO DENT","STE DIEN","HOL BERM","CHA FABE","XYR MART","GER CINE","HOL RUFU","LAC TRIQ","PAR ACUM","ALU SCRI","BAL CAPR","MAL PLUM","CAN SUFF","CAN PULL","HET CRUE","OGC SPE.","XYR SPE.","ACA QUAD","CAL BAJO","MON TUCK","SPH SPEN","ARC RHOM","DIO HOLO","LAC BICA","XYR NOVA","BAL VETU","DIO HYST","HAL CYAN","GYM FUNE","DIP HOLB","APO PSEU","HOL TOWN","EQU PUNC","LAC TRIG","HAL PICT","MYR JACO","SAR VEXI","SYN INTE","HAL CAUD","AMB PINO","GYM MILI","ALU SCHO","ACA POLY","CAL PROR","CHI SCHO","HET LONG","SCO PLUM","CHR ENCH","CAL SPE.","APO MACU","CAN MACR","PAR UMBR","LAG RHOM","EQU LANC","CAL PENN","STE HISP","APO BINO","NEO MARI","ARC PROB","CHI ANTE","APO TOWN","DOR MEGA","REM REMO","OPI WHIT","CEN ARGI","SYN FOET","AST SPE.","CAR HIPP","SAR CORU","OPI MACR","GYM VICI","DIP ARGE","PAG PAGR","PAR BAIR","BOT LUNA","EUC ARGE","PRO ACUL","LAB GOBI","FIS TABA","ALU SPE.","GRA LORE","MON CILI","ECH NEUC","ALU MONO","BOT OCEL","BAL SPE.","PAR ALBI","STE SPE.","APO QUAD","ENC NIGR","GYM SAXI","OPI SPE.","ELO SAUR","MAN BIRO","APO AURO","SPH TEST","CAL NODO","DIO SPE.","SCO CARI","LAB FILA","AHL EGMO","ANT OCEL","AST GUTT","LAB SPE.","LAB SPE.","MUR RETI","AST STEL","EUC GULA","HOL SPE.","ORT CHRY","PRI OPHR","LAB BUCC","ACA SOLA","CAL LEUC","ENC CARY","GYM NIGR","MYR BREV","SAR BULL","TRA GOOD","TRA LATH","UMB CORO","EUC JONE","EUCLEFR","STY LATE","SYA MICR","SYN SCOV","APO PHEN","HIP REID","PHA XENU","AST PUNC","CHI ATIN","CHL CHRY","HIP EREC","OGC NASU","SER PHOE","SPH NEPH","MYR OCEL","PRI RUBI","RHI LENT","ALB VULP","DAC VOLI","RYP BIST","BRO BARB","HYP GUMM","OPS TAU_","EMM ATLA","UPE PARV","SYN SYNO")
+    
+    #abundance
+    higher_reef_fk_abun = getDomainAbundance(RVCdata_FK, higher_reef_spp_list)
+    write_csv(higher_reef_fk_abun, "prep/data/rvc_trophic_groups/higher_reef_fk_abun_merged.csv")
+    
+    #density
+    higher_reef_fk_den = getDomainDensity(RVCdata_FK, higher_reef_spp_list)
+    write_csv(higher_reef_fk_den, "prep/data/rvc_trophic_groups/higher_reef_fk_den_merged.csv")
+    
+    #biomass
+    higher_reef_fk_bio = getDomainBiomass(RVCdata_FK, higher_reef_spp_list, RVCdata_FK$taxonomic_data)
+    write_csv(higher_reef_fk_bio, "prep/data/rvc_trophic_groups/higher_reef_fk_bio_merged.csv")
+    
+    #fk diversity
+    higher_reef_fk_abundance = higher_reef_fk_abun %>% 
+      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+      group_by(YEAR, protected_status) %>% #48 groups 
+      nest(-YEAR) %>%  
+      mutate(
+        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+        #species richness 
+        richness = map(
+          data_wide, 
+          function(x) specnumber(x)),
+        #simpson diversity as effective number of species 
+        simpson = map( 
+          data_wide,
+          function(x) 1/(1 - diversity(x, index = 'simpson'))),
+        #shannon diversity as effective number of species 
+        shannon = map(
+          data_wide,
+          function(x) exp(diversity(x, index = 'shannon')))) %>%
+      unnest(richness, simpson, shannon)
+    
+    higher_reef_diversity = higher_reef_fk_abundance %>%
+      select(YEAR, protected_status, richness, simpson, shannon) 
+    write_csv(higher_reef_diversity, "prep/data/rvc_trophic_groups/higher_reef_fk_diversity.csv")
+    
+    opportunists_spp_list = c("CAR RUBE", "SPH BARR", "ALE CILI","DEC PUNC", "DEC MACA", "CAR CRYS", "CAR BART", "SCO REGA","SPH PICU", "CAR LATU", "SEL VOME", "ELA BIPI", "CAR SPE.", "TRA FALC", "EUT ALLE", "SER RIVO", "SCO MACU", "SER DUME", "SCO CAVA", "SPH GUAC", "CAR LUGU", "OLI SAUR", "SER SPE.", "Rac cana", "Ser zona")
+    
+    #abundance
+    opportunists_fk_abun = getDomainAbundance(RVCdata_FK, opportunists_spp_list, merge_protected = F)
+    write_csv(opportunists_fk_abun, "prep/data/rvc_trophic_groups/opportunists_fk_abun.csv")
+    
+    #density
+    opportunists_fk_den = getDomainDensity(RVCdata_FK, opportunists_spp_list, merge_protected = F)
+    write_csv(opportunists_fk_den, "prep/data/rvc_trophic_groups/opportunists_fk_den.csv")
+    
+    #biomass
+    opportunists_fk_bio = getDomainBiomass(RVCdata_FK, opportunists_spp_list, RVCdata_FK$taxonomic_data)
+    write_csv(opportunists_fk_bio, "prep/data/rvc_trophic_groups/opportunists_fk_bio_merged.csv")
+    
+    #diversity
+    opportunists_fk_abundance = opportunists_fk_abun %>% 
+      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+      group_by(YEAR, protected_status) %>% #48 groups 
+      nest(-YEAR) %>%  
+      mutate(
+        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+        #species richness 
+        richness = map(
+          data_wide, 
+          function(x) specnumber(x)),
+        #simpson diversity as effective number of species 
+        simpson = map( 
+          data_wide,
+          function(x) 1/(1 - diversity(x, index = 'simpson'))),
+        #shannon diversity as effective number of species 
+        shannon = map(
+          data_wide,
+          function(x) exp(diversity(x, index = 'shannon')))) %>%
+      unnest(richness, simpson, shannon)
+    
+    opportunists_fk_diversity = opportunists_fk_abundance %>%
+      select(YEAR, protected_status, richness, simpson, shannon) 
+    write_csv(opportunists_fk_diversity, "prep/data/rvc_trophic_groups/opportunists_fk_diversity.csv")
+    
+    small_reef_fish_spp_list = c("COR PERS","ACA COER","KYP SECT","ACA BAHI","ACA CHIR","COR GLAU","ELA OCEA","GNA THOM","PTE CALL","ACA SPE.","MAL TRIA","COR DICR","PAR MARM","MAL MACR","OPH MACC","CTE SAEP","MIC CARR","PTE HELE","HEM SIMU","SCA CRIS","COR EIDO","GOB SPE.","TYL CROC","MIC MICR","ACA ASPE","COR SPE.","BLE SPE.","STR NOTA","MEL NIGE","HYP BERM","EMB PAND","ELA EVEL","ACA CHAP","EMB BAHA","COR LIPE","NES LONG","ENN BOEH","ACA MARI","LAB NUCH","MAL VERS","MAL GILL","ELA MACR","PRI HIPO","GOB DILE","ELA SAUC","ELA XANT","STR TIMU","MAL AURO","PAR MARN","CHA LIMB","OXY STIG","ELA HORS","PAR NIGR","COR PUNC","ACA SPIN","BOL BOQU","ElA RAND","LAB KALI","LAB NIGR","ENN ALTI")
+    
+    #abundance
+    small_reef_fk_abun = getDomainAbundance(RVCdata_FK, small_reef_fish_spp_list, merge_protected = F)
+    write_csv(small_reef_fk_abun, "prep/data/rvc_trophic_groups/small_reef_fk_abun.csv")
+    
+    #density
+    small_reef_fk_den = getDomainDensity(RVCdata_FK, small_reef_fish_spp_list, merge_protected = F)
+    write_csv(small_reef_fk_den, "prep/data/rvc_trophic_groups/small_reef_fk_den.csv")
+    
+    #biomass
+    small_reef_fk_bio = getDomainBiomass(RVCdata_FK, small_reef_fish_spp_list, RVCdata_FK$taxonomic_data)
+    write_csv(small_reef_fk_bio, "prep/data/rvc_trophic_groups/small_reef_fk_bio_merged.csv")
+    
+    #fk diversity
+    small_reef_fk_abundance = small_reef_fk_abun %>% 
+      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+      group_by(YEAR, protected_status) %>% #48 groups 
+      nest(-YEAR) %>%  
+      mutate(
+        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+        #species richness 
+        richness = map(
+          data_wide, 
+          function(x) specnumber(x)),
+        #simpson diversity as effective number of species 
+        simpson = map( 
+          data_wide,
+          function(x) 1/(1 - diversity(x, index = 'simpson'))),
+        #shannon diversity as effective number of species 
+        shannon = map(
+          data_wide,
+          function(x) exp(diversity(x, index = 'shannon')))) %>%
+      unnest(richness, simpson, shannon)
+    
+    small_reef_fk_diversity = small_reef_fk_abundance %>%
+      select(YEAR, protected_status, richness, simpson, shannon) 
+    write_csv(small_reef_fk_diversity, "prep/data/rvc_trophic_groups/small_reef_fk_diversity.csv")
+    
+  }
+  
+  #abundance data 
+  grunt_abun        = read_csv("prep/data/rvc_trophic_groups/snapper_fk_abun.csv")
+  higher_reef_abun  = read_csv("prep/data/rvc_trophic_groups/seabass_fk_abun.csv")
+  opportunists_abun = read_csv("prep/data/rvc_trophic_groups/hogfish_fk_abun.csv")
+  small_reef_abun   = read_csv("prep/data/rvc_trophic_groups/grouper_fk_abun.csv")
+  
+  grunt_etc_abun = rbind(grunt_abun,higher_reef_abun,opportunists_abun,small_reef_abun) #1999-2016 
+  
+  grunt_etc_abun = grunt_etc_abun %>%
+    group_by(YEAR) %>%
+    summarize(
+      abundance_mean = mean(abundance),
+      abundance_n = length(abundance),
+      abundance_sd = sd(abundance),
+      abundance_se = abundance_sd / sqrt(abundance_n),
+      abundance_min = min(abundance),
+      abundance_max = max(abundance))
+  write_csv(grunt_etc_abun, "prep/data/rvc_trophic_groups/grunt_etc_abun.csv")
+  
+  #biomass data 
+  grunt_bio = read_csv("prep/data/rvc_trophic_groups/grunt_fk_bio_merged.csv")
+  higher_reef_bio = read_csv("prep/data/rvc_trophic_groups/higher_reef_fk_bio_merged.csv")
+  opportunists_bio = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_bio_merged.csv")
+  small_reef_bio = read_csv("prep/data/rvc_trophic_groups/small_reef_fk_bio_merged.csv")
+  
+  grunt_etc_bio = rbind(grunt_bio,higher_reef_bio,opportunists_bio,small_reef_bio) #1999-2016 
+  
+  grunt_etc_bio = grunt_etc_bio %>%
+    group_by(YEAR) %>%
+    summarize(
+      biomass_mean = mean(biomass),
+      biomass_n = length(biomass),
+      biomass_sd = sd(biomass),
+      biomass_se = biomass_sd / sqrt(biomass_n),
+      biomass_min = min(biomass),
+      biomass_max = max(biomass))
+  write_csv(grunt_etc_bio, "prep/data/rvc_trophic_groups/grunt_etc_bio.csv")
+  
+  #density data 
+  grunt_den = read_csv("prep/data/rvc_trophic_groups/grunt_fk_den.csv")
+  higher_reef_den = read_csv("prep/data/rvc_trophic_groups/higher_reef_fk_den.csv")
+  opportunists_den = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_den.csv")
+  small_reef_den = read_csv("prep/data/rvc_trophic_groups/small_reef_fk_den.csv")
+  
+  grunt_etc_den = rbind(grunt_den,higher_reef_den,opportunists_den,small_reef_den) #1999-2016 
+  
+  grunt_etc_den = grunt_etc_den %>%
+    group_by(YEAR) %>%
+    summarize(
+      density_mean = mean(density),
+      density_n = length(density),
+      density_sd = sd(density),
+      density_se = density_sd / sqrt(density_n),
+      density_min = min(density),
+      density_max = max(density))
+  write_csv(grunt_etc_den, "prep/data/rvc_trophic_groups/grunt_etc_den.csv")
+  
+  #diversity data 
+  grunt_diversity = read_csv("prep/data/rvc_trophic_groups/grunt_fk_diversity.csv")
+  higher_reef_diversity = read_csv("prep/data/rvc_trophic_groups/higher_reef_fk_diversity.csv")
+  opportunists_diversity = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_diversity.csv")
+  small_reef_diversity = read_csv("prep/data/rvc_trophic_groups/small_reef_fk_diversity.csv")
+  
+  grunt_etc_diversity = rbind(grunt_diversity,higher_reef_diversity,opportunists_diversity,small_reef_diversity) #1994-2016 
+  
+  grunt_etc_diversity = grunt_etc_diversity %>%
+    filter(protected_status != "0") %>%
+    filter(protected_status != "1") %>%
+    group_by(YEAR) %>%
+    summarize(
+      richness_mean = mean(richness),
+      richness_n = length(richness),
+      richness_sd = sd(richness),
+      richness_se = richness_sd / sqrt(richness_n),
+      richness_min = min(richness),
+      richness_max = max(richness),
+      simpson_mean = mean(simpson),
+      simpson_n = length(simpson),
+      simpson_sd = sd(simpson),
+      simpson_se = simpson_sd / sqrt(simpson_n),
+      simpson_min = min(simpson),
+      simpson_max = max(simpson),
+      shannon_mean = mean(shannon),
+      shannon_n = length(shannon),
+      shannon_sd = sd(shannon),
+      shannon_se = shannon_sd / sqrt(shannon_n),
+      shannon_min = min(shannon),
+      shannon_max = max(shannon))
+  
+  write_csv(grunt_etc_diversity, "prep/data/rvc_trophic_groups/grunt_etc_diversity.csv")  
+}
+
+```
+
+- rays 
+
+```{r rays}
+if(!all(file.exists("prep/data/rvc_trophic_groups/rays_abun.csv",
+                    "prep/data/rvc_trophic_groups/rays_den.csv",
+                    "prep/data/rvc_trophic_groups/rays_bio.csv",
+                    "prep/data/rvc_trophic_groups/rays_div.csv"))){
+  
+  rays_fk_abun_csv     = "prep/data/rays_fk_abun.csv"        #abundance
+  rays_fk_den_csv      = "prep/data/rays_fk_den.csv"           #density
+  rays_fk_bio_csv      = "prep/data/rays_fk_bio_merged.csv"    #biomass 
+  rays_fk_diversity_csv= "prep/data/rays_fk_diversity.csv"   #diversity 
+  
+  if (!all(file.exists(
+    rays_fk_abun_csv, rays_fk_den_csv, rays_fk_bio_csv,rays_fk_diversity_csv))){
+    
+    rays_fish_spp_list= c("HYP HARR", "ATH STIP", "JEN SPE.", "HAR JAGU", "ANC LYOL", "INE VITT", "HEM BRAS", "SAR AURI", "HAR HUME", "CHR ATHE")
+    
+    #abundance
+    rays_fk_abun = getDomainAbundance(RVCdata_FK, rays_fish_spp_list)
+    write_csv(rays_fk_abun, "prep/data/rvc_trophic_groups/rays_fk_abun.csv")
+    
+    #density
+    rays_fk_den = getDomainDensity(RVCdata_FK, rays_fish_spp_list)
+    write_csv(rays_fk_den, "prep/data/rvc_trophic_groups/rays_fk_den.csv")
+    
+    #biomass
+    rays_fk_bio = getDomainBiomass(RVCdata_FK, rays_fish_spp_list, RVCdata_FK$taxonomic_data)
+    write_csv(rays_fk_bio, "prep/data/rvc_trophic_groups/rays_fk_bio_merged.csv")
+    
+    #fk diversity metrics 
+    rays_fk_abundance = rays_fk_abun %>% 
+      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+      group_by(YEAR, protected_status) %>% #48 groups 
+      nest(-YEAR) %>%  
+      mutate(
+        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+        #species richness 
+        richness = map(
+          data_wide, 
+          function(x) specnumber(x)),
+        #simpson diversity as effective number of species 
+        simpson = map( 
+          data_wide,
+          function(x) 1/(1 - diversity(x, index = 'simpson'))),
+        #shannon diversity as effective number of species 
+        shannon = map(
+          data_wide,
+          function(x) exp(diversity(x, index = 'shannon')))) %>%
+      unnest(richness, simpson, shannon)
+    
+    rays_fk_diversity = rays_fk_abundance %>%
+      select(YEAR, protected_status, richness, shannon, simpson) 
+    write_csv(rays_fk_diversity, "prep/data/rvc_trophic_groups/rays_fk_diversity.csv")
+    
+  } else{
+    
+    rays_fk_abun = read_csv("prep/data/rvc_trophic_groups/rays_fk_abun.csv")
+    rays_abun = rays_fk_abun %>%
+      group_by(YEAR) %>%
+      summarize(
+        abundance_mean = mean(abundance),
+        abundance_n = length(abundance),
+        abundance_sd = sd(abundance),
+        abundance_se = abundance_sd / sqrt(abundance_n),
+        abundance_min = min(abundance),
+        abundance_max = max(abundance))
+    write_csv(rays_abun, "prep/data/rvc_trophic_groups/rays_abun.csv")
+    
+    rays_fk_den = read_csv("prep/data/rvc_trophic_groups/rays_fk_den.csv")
+    rays_den = rays_fk_den %>%
+      group_by(YEAR) %>%
+      summarize(
+        density_mean = mean(density),
+        density_n = length(density),
+        density_sd = sd(density),
+        density_se = density_sd / sqrt(density_n),
+        density_min = min(density),
+        density_max = max(density))
+    write_csv(rays_den, "prep/data/rvc_trophic_groups/rays_den.csv")
+    
+    rays_fk_bio = read_csv("prep/data/rvc_trophic_groups/rays_fk_bio_merged.csv")
+    rays_bio = rays_fk_bio %>%
+      group_by(YEAR) %>%
+      summarize(
+        biomass_mean = mean(biomass),
+        biomass_n = length(biomass),
+        biomass_sd = sd(biomass),
+        biomass_se = biomass_sd / sqrt(biomass_n),
+        biomass_min = min(biomass),
+        biomass_max = max(biomass))
+    write_csv(rays_bio, "prep/data/rvc_trophic_groups/rays_bio.csv")
+    
+    rays_fk_diveristy = read_csv("prep/data/rvc_trophic_groups/rays_fk_diversity.csv") 
+    rays_div = rays_fk_diveristy %>%
+      filter(protected_status != "0") %>%
+      filter(protected_status != "1") %>%
+      select(YEAR, richness, shannon, simpson)
+    write_csv(rays_div, "prep/data/rvc_trophic_groups/rays_div.csv")
+  }
+}
+```
+
+- sharks 
+
+```{r sharks}
+
+if(!all(file.exists("prep/data/rvc_trophic_groups/sharks_abun.csv",
+                    "prep/data/rvc_trophic_groups/sharks_den.csv",
+                    "prep/data/rvc_trophic_groups/sharks_bio_merged.csv",
+                    "prep/data/rvc_trophic_groups/sharks_div.csv"))){
+  
+  sharks_fk_abun_csv     = "prep/data/sharks_fk_abun.csv"        #abundance
+  sharks_fk_den_csv      = "prep/data/sharks_fk_den.csv"           #density
+  sharks_fk_bio_csv      = "prep/data/sharks_fk_bio_merged.csv"    #biomass 
+  sharks_fk_diversity_csv= "prep/data/sharks_fk_diversity.csv"   #diversity 
+  
+  if (!all(file.exists(
+    sharks_fk_abun_csv, sharks_fk_den_csv, sharks_fk_bio_csv,sharks_fk_diversity_csv))){
+    
+    sharks_fish_spp_list= c("HYP HARR", "ATH STIP", "JEN SPE.", "HAR JAGU", "ANC LYOL", "INE VITT", "HEM BRAS", "SAR AURI", "HAR HUME", "CHR ATHE")
+    
+    #abundance
+    sharks_fk_abun = getDomainAbundance(RVCdata_FK, sharks_fish_spp_list)
+    write_csv(sharks_fk_abun, "prep/data/rvc_trophic_groups/sharks_fk_abun.csv")
+    
+    #density
+    sharks_fk_den = getDomainDensity(RVCdata_FK, sharks_fish_spp_list)
+    write_csv(sharks_fk_den, "prep/data/rvc_trophic_groups/sharks_fk_den.csv")
+    
+    #biomass
+    sharks_fk_bio = getDomainBiomass(RVCdata_FK, sharks_fish_spp_list, RVCdata_FK$taxonomic_data)
+    write_csv(sharks_fk_bio, "prep/data/rvc_trophic_groups/sharks_fk_bio_merged.csv")
+    
+    #fk diversity metrics 
+    sharks_fk_abundance = sharks_fk_abun %>% 
+      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+      group_by(YEAR, protected_status) %>% #48 groups 
+      nest(-YEAR) %>%  
+      mutate(
+        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+        #species richness 
+        richness = map(
+          data_wide, 
+          function(x) specnumber(x)),
+        #simpson diversity as effective number of species 
+        simpson = map( 
+          data_wide,
+          function(x) 1/(1 - diversity(x, index = 'simpson'))),
+        #shannon diversity as effective number of species 
+        shannon = map(
+          data_wide,
+          function(x) exp(diversity(x, index = 'shannon')))) %>%
+      unnest(richness, simpson, shannon)
+    
+    sharks_fk_diversity = sharks_fk_abundance %>%
+      select(YEAR, protected_status, richness, shannon, simpson) 
+    write_csv(sharks_fk_diversity, "prep/data/rvc_trophic_groups/sharks_fk_diversity.csv")
+    
+  } else{
+    
+    sharks_fk_abun = read_csv("prep/data/rvc_trophic_groups/sharks_fk_abun.csv")
+    sharks_abun = sharks_fk_abun %>%
+      group_by(YEAR) %>%
+      summarize(
+        abundance_mean = mean(abundance),
+        abundance_n = length(abundance),
+        abundance_sd = sd(abundance),
+        abundance_se = abundance_sd / sqrt(abundance_n),
+        abundance_min = min(abundance),
+        abundance_max = max(abundance))
+    write_csv(sharks_abun, "prep/data/rvc_trophic_groups/sharks_abun.csv")
+    
+    sharks_fk_den = read_csv("prep/data/rvc_trophic_groups/sharks_fk_den.csv")
+    sharks_den = sharks_fk_den %>%
+      group_by(YEAR) %>%
+      summarize(
+        density_mean = mean(density),
+        density_n = length(density),
+        density_sd = sd(density),
+        density_se = density_sd / sqrt(density_n),
+        density_min = min(density),
+        density_max = max(density))
+    write_csv(sharks_den, "prep/data/rvc_trophic_groups/sharks_den.csv")
+    
+    sharks_fk_bio = read_csv("prep/data/rvc_trophic_groups/sharks_fk_bio_merged.csv")
+    sharks_bio = sharks_fk_bio %>%
+      group_by(YEAR) %>%
+      summarize(
+        biomass_mean = mean(biomass),
+        biomass_n = length(biomass),
+        biomass_sd = sd(biomass),
+        biomass_se = biomass_sd / sqrt(biomass_n),
+        biomass_min = min(biomass),
+        biomass_max = max(biomass))
+    write_csv(sharks_bio, "prep/data/rvc_trophic_groups/sharks_bio.csv")
+    
+    sharks_fk_diveristy = read_csv("prep/data/rvc_trophic_groups/sharks_fk_diversity.csv") 
+    sharks_div = sharks_fk_diveristy %>%
+      filter(protected_status != "0") %>%
+      filter(protected_status != "1") %>%
+      select(YEAR, richness, shannon, simpson)
+    write_csv(sharks_div, "prep/data/rvc_trophic_groups/sharks_div.csv")
+  }
+}
+```
+
+- lionfish
+
+```{r lionfish}
+
+if(!all(file.exists("prep/data/rvc_trophic_groups/lionfish_abun.csv",
+                    "prep/data/rvc_trophic_groups/lionfish_den.csv",
+                    "prep/data/rvc_trophic_groups/lionfish_bio_merged.csv",
+                    "prep/data/rvc_trophic_groups/lionfish_div.csv"))){
+  
+  lionfish_fk_abun_csv     = "prep/data/lionfish_fk_abun.csv"        #abundance
+  lionfish_fk_den_csv      = "prep/data/lionfish_fk_den.csv"           #density
+  lionfish_fk_bio_csv      = "prep/data/lionfish_fk_bio_merged.csv"    #biomass 
+  lionfish_fk_diversity_csv= "prep/data/lionfish_fk_diversity.csv"   #diversity 
+  
+  if (!all(file.exists(
+    lionfish_fk_abun_csv, lionfish_fk_den_csv, lionfish_fk_bio_csv,lionfish_fk_diversity_csv))){
+    
+    lionfish_fish_spp_list= c("HYP HARR", "ATH STIP", "JEN SPE.", "HAR JAGU", "ANC LYOL", "INE VITT", "HEM BRAS", "SAR AURI", "HAR HUME", "CHR ATHE")
+    
+    #abundance
+    lionfish_fk_abun = getDomainAbundance(RVCdata_FK, lionfish_fish_spp_list)
+    write_csv(lionfish_fk_abun, "prep/data/rvc_trophic_groups/lionfish_fk_abun.csv")
+    
+    #density
+    lionfish_fk_den = getDomainDensity(RVCdata_FK, lionfish_fish_spp_list)
+    write_csv(lionfish_fk_den, "prep/data/rvc_trophic_groups/lionfish_fk_den.csv")
+    
+    #biomass
+    lionfish_fk_bio = getDomainBiomass(RVCdata_FK, lionfish_fish_spp_list, RVCdata_FK$taxonomic_data)
+    write_csv(lionfish_fk_bio, "prep/data/rvc_trophic_groups/lionfish_fk_bio_merged.csv")
+    
+    #fk diversity metrics 
+    lionfish_fk_abundance = lionfish_fk_abun %>% 
+      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+      group_by(YEAR, protected_status) %>% #48 groups 
+      nest(-YEAR) %>%  
+      mutate(
+        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+        #species richness 
+        richness = map(
+          data_wide, 
+          function(x) specnumber(x)),
+        #simpson diversity as effective number of species 
+        simpson = map( 
+          data_wide,
+          function(x) 1/(1 - diversity(x, index = 'simpson'))),
+        #shannon diversity as effective number of species 
+        shannon = map(
+          data_wide,
+          function(x) exp(diversity(x, index = 'shannon')))) %>%
+      unnest(richness, simpson, shannon)
+    
+    lionfish_fk_diversity = lionfish_fk_abundance %>%
+      select(YEAR, protected_status, richness, shannon, simpson) 
+    write_csv(lionfish_fk_diversity, "prep/data/rvc_trophic_groups/lionfish_fk_diversity.csv")
+    
+  } else{
+    
+    lionfish_fk_abun = read_csv("prep/data/rvc_trophic_groups/lionfish_fk_abun.csv")
+    lionfish_abun = lionfish_fk_abun %>%
+      group_by(YEAR) %>%
+      summarize(
+        abundance_mean = mean(abundance),
+        abundance_n = length(abundance),
+        abundance_sd = sd(abundance),
+        abundance_se = abundance_sd / sqrt(abundance_n),
+        abundance_min = min(abundance),
+        abundance_max = max(abundance))
+    write_csv(lionfish_abun, "prep/data/rvc_trophic_groups/lionfish_abun.csv")
+    
+    lionfish_fk_den = read_csv("prep/data/rvc_trophic_groups/lionfish_fk_den.csv")
+    lionfish_den = lionfish_fk_den %>%
+      group_by(YEAR) %>%
+      summarize(
+        density_mean = mean(density),
+        density_n = length(density),
+        density_sd = sd(density),
+        density_se = density_sd / sqrt(density_n),
+        density_min = min(density),
+        density_max = max(density))
+    write_csv(lionfish_den, "prep/data/rvc_trophic_groups/lionfish_den.csv")
+    
+    lionfish_fk_bio = read_csv("prep/data/rvc_trophic_groups/lionfish_fk_bio_merged.csv")
+    lionfish_bio = lionfish_fk_bio %>%
+      group_by(YEAR) %>%
+      summarize(
+        biomass_mean = mean(biomass),
+        biomass_n = length(biomass),
+        biomass_sd = sd(biomass),
+        biomass_se = biomass_sd / sqrt(biomass_n),
+        biomass_min = min(biomass),
+        biomass_max = max(biomass))
+    write_csv(lionfish_bio, "prep/data/rvc_trophic_groups/lionfish_bio.csv")
+  }
+}
+
+```
+
+- trophic pyramid 
+
+```{r trophic pyramid}
+
+if(!file.exists("prep/data/rvc_trophic_level/trophic_level_biomass.csv")){ 
+  
+  trophic_levels = read_csv('prep/data/rvc_trophic_level/RVC_trophic_level.csv')
+  
+  trophic_level = trophic_levels %>%
+    select(RVC_CODE, Trophic_Level) %>%  #391 species 
+    mutate(
+      TL = # 3 trophic levels 
+        ifelse(Trophic_Level == 2, "TL2",
+               ifelse(Trophic_Level == 3, "TL3",
+                      ifelse(Trophic_Level == 4, "TL4", NA))),
+      SPECIES_CD = RVC_CODE) %>% 
+    arrange(SPECIES_CD) %>% 
+    select(SPECIES_CD, TL) 
+  
+  trophic_level_bio = getDomainBiomass(RVCdata_FK, trophic_level$RVC_CODE, RVCdata_FK$taxonomic_data)
+  write_csv(trophic_level_bio, "prep/data/rvc_trophic_level/trophic_level_bio.csv")
+  
+  trophic_level_bio = trophic_level_bio %>%
+  select(YEAR, biomass, SPECIES_CD) %>% 
+  left_join(trophic_level, trophic_level_bio, by = 'SPECIES_CD') %>% 
+  #trophic_level_biomass = trophic_level_bio %>% 
+  group_by(YEAR, TL) %>%
+  summarise(
+  ntot = sum(biomass)) %>% 
+  spread(TL, ntot)
+  
+  write_csv(trophic_level_bio, "prep/data/rvc_trophic_level/trophic_level_biomass")
+  
+}
+
+```
+
+- exploited reef fish 
+
+```{r exploited reef fish}
+
+```
+
+- reef fish biodiversity 
+
+```{r reef fish biodiversity}
+
+if(!file.exists("prep/data/domain_div.csv"))
+
+domain_abun = read_csv("C:/Users/mhepn/Documents/RVC/big_csv/abundance_domain/domain_fk_abun.csv") #1307 KB
+
+domain_div = domain_abun %>%
+  filter(protected_status == "all") %>%
+  select(YEAR, SPECIES_CD, abundance) %>%
+  group_by(YEAR) %>%
+  nest(-YEAR) %>%
+  mutate(
+    data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill =0)),
+    richness = map(data_wide, function(x) specnumber(x)),
+    simpson  = map(data_wide, function(x) 1/(1 - diversity(x, index = 'simpson'))),
+    shannon = map(data_wide,  function(x) exp(diversity(x,  index = 'shannon')))) %>% 
+    unnest(richness, simpson, shannon)
+
+domain_div = domain_div %>%
+  select(YEAR, richness, simpson, shannon)
+
+write_csv(domain_div, "prep/data/domain_div.csv")
+
+```
+
+- queen conch
+
+```{r queen conch}
+
+```
+
+- caribbean spiny lobster 
+
+```{r caribbean spiny lobster}
+
+```
+
+- stony coral
+- octocoral
+- macroalgae 
+- sponges 
+
+```{foundation species}
+
+```
