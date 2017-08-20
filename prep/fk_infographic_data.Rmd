@@ -19,13 +19,30 @@ library(RColorBrewer)
 
 ```{r read domain rvc data}
 
-RVCdata_FK = read_rds("C:/Users/mhepn/Documents/RVC/big_csv/RVCdata_FK.rds") #473 MB
-
-#domain_abun = read_csv("C:/Users/mhepn/Documents/RVC/big_csv/abundance_domain/domain_fk_abun.csv") #1307 KB
-#domain_biomass = read_csv("prep/data/domain_fk_biomass.csv") #1328 KB
-#domain_density = read_csv("prep/data/domain_fk_density.csv") #1257 KB
+if(!file.exists("C:/Users/mhepn/Documents/RVC/big_csv/RVCdata_FK.rds")){
+  RVCdata_FK <- getRvcData(1999:2016, "FLA KEYS", server = 'https://www.sefsc.noaa.gov/rvc_analysis20/')
+  write_rds(RVCdata_FK, 'big_csv/RVCdata_FK.rds')
+  
+}else{
+  RVCdata_FK = read_rds("C:/Users/mhepn/Documents/RVC/big_csv/RVCdata_FK.rds") #473 MB
+}
 
 ```
+
+### Forage fish
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
+|*Hypoatherina harringtonensis* | reef silverside	    | HYP HARR  |
+|*Atherinomorus stipes*	        | hardhead silverside	| ATH STIP  |
+|*Jenkinsia sp.*	              | herring species	    | JEN SPE.  |
+|*Harengula jaguana*	          | scaled sardine	    | HAR JAGU  |
+|*Anchoa lyolepis*	            | dusky anchovy	      | ANC LYOL  |
+|*Inermia vittata*	            | boga	              | INE VITT  |
+|*Hemiramphus brasiliensis*	    | ballyhoo	          | HEM BRAS  |
+|*Sardinella aurita*	          | spanish sardine	    | SAR AURI  |
+|*Harengula humeralis*	        | redear sardine	    | HAR HUME  |
+|*Chriodorus atherinoides*	    | hardhead halfbeak	  | CHR ATHE  |
 
 ```{r forage fish}
 
@@ -133,6 +150,88 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/forage_abun.csv",
 - snapper 
 - hogfish
 - seabass and hamlets 
+
+### Grouper
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
+|*Cephalopholis cruentata*      |	graysby	            | CEP CRUE  |
+|*Cephalopholis fulva*          |	coney	              | CEP FULV  |
+|*Dermatolepis inermis*         |	marbled grouper	    | DER INER  |
+|*Epinephelus flavolimbatus*    |	yellowedge grouper	| EPI FLAV  |
+|*Epinephelus itajara*          |	goliath grouper	    | EPI ITAJ  |
+|*Epinephelus morio*            |	red grouper	        | EPI MORI  |
+|*Epinephelus niveatus*	        | snowy grouper	      | EPI NIVE  |
+|*Epinephelus striatus*         |	nassau grouper	    | EPI STRI  |
+|*grouper-sea bass species*     |	grouper-sea bass sp |	SRR SPE.  |
+|*Mycteroperca acutirostris*    |	western comb grouper| MYC ACUT  |
+|*Mycteroperca bonaci*          |	black grouper	      | MYC BONA  |
+|*Mycteroperca interstitialis*  |	yellowmouth grouper	| MYC INTE  |
+|*Mycteroperca microlepis*      |	gag	                | MYC MICR  |
+|*Mycteroperca phenax*          |	scamp	              | MYC PHEN  |
+|*Mycteroperca tigris*          |	tiger grouper	      | MYC TIGR  |
+|*Mycteroperca venenosa*        |	yellowfin grouper	  | MYC VENE  |
+
+### Snappers
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
+|*Lutjanus analis*              |	mutton snapper	    | LUT ANAL  |
+|*Lutjanus apodus*	            | schoolmaster	      | LUT APOD  |
+|*Lutjanus buccanella*	        | blackfin snapper	  | LUT BUCC  |
+|*Lutjanus campechanus*	        | red snapper	        | Lut CAMP  |
+|*Lutjanus cyanopterus*	        | cubera snapper	    | LUT CYAN  |
+|*Lutjanus griseus*	            | gray snapper	      | LUT GRIS  |
+|*Lutjanus jocu*	              | dog snapper	        | LUT JOCU  |
+|*Lutjanus mahogoni*	          | mahogany snapper	  | LUT MAHO  |
+|*Lutjanus synagris*	          | lane snapper	      | LUT SYNA  |
+|*Ocyurus chrysurus*	          | yellowtail snapper	| OCY CHRY  |
+|*Rhomboplites aurorubens*	    | vermilion snapper	  | RHO AURO  |
+|*snapper species*	            | snapper species	    | LUT SPE.  |
+
+### Hogfish
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
+|*Bodianus pulchellus*	        | spotfin hogfish	    | BOD PULC  |
+|*Bodianus rufus*	              | Spanish hogfish	    | BOD RUFU  |
+|*Lachnolaimus maximus*	        | hogfish	            | LAC MAXI  |
+
+### Sea bass and Hamlets
+
+| Scientific name               | Common name           | RVC code  |  
+|:------------------------------|:----------------------|:----------|
+|*Alphestes afer*	              | mutton hamlet	        | ALP AFER  |
+|*Centropristis ocyurus*	      | bank sea bass	        | CEN OCYU  |
+|*Centropristis striata*        |	black sea bass	      | CEN STRI  |
+|*Diplectrum formosum*          |	sand perch	          | DIP FORM  |
+|*Epinephelus adscensionis*     |	rock hind	            | EPI ADSC  |
+|*Epinephelus drummondhayi*     |	speckled hind	        | EPI DRUM  |
+|*Epinephelus guttatus*         |	red hind	            | EPI GUTT  |
+|*Hypoplectrus chlorurus*	      | yellowtail hamlet	    | HYP CHLO  |
+|*Hypoplectrus gemma*	          | blue hamlet	          | HYP GEMM  |
+|*Hypoplectrus guttavarius*	    | shy hamlet	          | HYP GUTT  |
+|*Hypoplectrus hybrid*          |	hybrid hamlet	        | HYP HYBR  |
+|*Hypoplectrus indigo*          |	indigo hamlet	        | HYP INDI  |
+|*Hypoplectrus nigricans*       |	black hamlet	        | HYP NIGR  |
+|*Hypoplectrus puella*          |	barred hamlet	        | HYP PUEL  |
+|*Hypoplectrus sp.*             |	hamlet species	      | HYP SPE.  |
+|*Hypoplectrus tann*            |	tan hamlet	          | HYP TANN  |
+|*Hypoplectrus unicolor*        |	butter hamlet	        | HYP UNIC  |
+|*Liopropoma eukrines*          |	wrasse basslet	      | LIO EUKR  |
+|*Liopropoma mowbrayi*          |	cave basslet	        | LIO MOWB  |
+|*Liopropoma rubre*	            | peppermint basslet	  | LIO RUBE  |
+|*Paranthias furcifer*	        | atlantic creolefish	  | PAR FURC  |
+|*Pristipomoides aquilonaris*	  | wenchman	            | PRI AQUI  |
+|*Rypticus maculatus*	          | whitespotted soapfish	| RYP MACU  |
+|*Rypticus saponaceus*	        | greater soapfish	    | RYP SAPO  |
+|*Schultzea beta*	              | school bass	          | SCH BETA  |
+|*Serranus annularis*	          | orangeback bass	      | SER ANNU  |
+|*Serranus baldwini*	          | lantern bass	        | SER BALD  |
+|*Serranus subligarius*	        | belted sandfish	      | SER SUBL  |
+|*Serranus tabacarius*	        | tobaccofish	          | SER TABA  |
+|*Serranus tigrinus*	          | harlequin bass	      | SER TIGR  |
+|*Serranus tortugarum*	        | chalk bass	          | SER TORT  |
 
 ```{r grouper-snapper complex}
 
@@ -413,7 +512,26 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/grouper_snapper_abun.csv",
   
 ```
 
-- parrotfish 
+### Parrotfish
+
+| Scientific name               | Common name           | RVC code  |  
+|:------------------------------|:----------------------|:----------|
+|*Cryptotomus roseus*	          | bluelip parrotfish	  | CRY ROSE  |
+|*Nicholsina usta*	            | emerald parrotfish	  | NIC USTA  |
+|*Scarus coelestinus*	          | midnight parrotfish	  | SCA COEL  |
+|*Scarus coeruleus*	            | blue parrotfish	      | SCA COER  |
+|*Scarus guacamaia*	            | rainbow parrotfish	  | SCA GUAC  |
+|*Scarus iseri*	                | striped parrotfish	  | SCA ISER  |
+|*Scarus sp.*	                  | parrotfish species	  | SCA SPE.  |
+|*Scarus taeniopterus*          |	princess parrotfish	  | SCA TAEN  |
+|*Scarus vetula*	              | queen parrotfish	    | SCA VETU  |
+|*Sparisoma atomarium*	        | greenblotch parrotfish|	SPA ATOM  |
+|*Sparisoma aurofrenatum*	      | redband parrotfish	  | SPA AURO  |
+|*Sparisoma chrysopterum*	      | redtail parrotfish	  | SPA CHRY  |
+|*Sparisoma radians*	          | bucktooth parrotfish	| SPA RADI  |
+|*Sparisoma rubripinne*	        | yellowtail parrotfish	| SPA RUBR  |
+|*Sparisoma sp.*	              | parrotfish species	  | SPA SPE.  |
+|*Sparisoma viride*	            | stoplight parrotfish	| SPA VIRI  |
 
 ```{r parrotfish}
 
@@ -521,10 +639,179 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/parrotfish_abun.csv",
 
 ```
 
+### Jacks/Opportunists 
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
+|*Alectis ciliaris*	            | african pompano	    | ALE CILI  |
+|*Caranx crysos*	              | blue runner	        | CAR CRYS  |
+|*Caranx bartholomaei*          |	yellow jack	        | CAR BART  |
+|*Caranx latus*                 |	horse-eye jack	    | CAR LATU  |
+|*Caranx lugubris*              |	black jack	        | CAR LUGU  |
+|*Caranx ruber*	                | bar jack	          | CAR RUBE  |
+|*Caranx sp.*	                  | jack species	      | CAR SPE.  |
+|*Decapterus punctatus*	        | round scad	        | DEC PUNC  |
+|*Decapterus macarellus*	      | mackerel scad	      | DEC MACA  |
+|*Elagatis bipinnulata*	        | rainbow runner	    | ELA BIPI  |
+|*Euthynnus alletteratus*	      | little tunny	      | EUT ALLE  |
+|*Oligoplites saurus*           |	leatherjack	        | OLI SAUR  |
+|*Sphyraena barracuda*	        | great barracuda	    | SPH BARR  |
+|*Rachycentron canadum*	        | cobia	              | RAC CANA  |
+|*Scomberomorus regalis*	      | cero	              | SCO REGA  |
+|*Sphyraena picudilla*	        | southern sennet	    | SPH PICU  |
+|*Selene vomer*	                | lookdown	          | SEL VOME  |
+|*Seriola rivoliana*	          | almaco jack       	| SER RIVO  |
+|*Scomberomorus maculatus*	    | spanish mackerel  	| SCO MACU  |
+|*Seriola dumerili*	            | greater amberjack 	| SER DUME  |
+|*Scomberomorus cavalla*	      | king mackerel	      | SCO CAVA  |
+|*Sphyraena guachancho*	        | guaguanche	        | SPH GUAC  |
+|*Seriola sp.*	                | jack species        |	SER SPE.  |
+|*Seriola zonata*	              | banded rudderfish	  | SER ZONA  |
+|*Trachinotus falcatus*	        | permit	            | TRA FALC  |
+
+```{r jacks}
+
+if(!all(file.exists("prep/data/rvc_trophic_groups/jacks_abun.csv",
+                    "prep/data/rvc_trophic_groups/jacks_den.csv",
+                    "prep/data/rvc_trophic_groups/jacks_bio.csv",
+                    "prep/data/rvc_trophic_groups/jacks_div.csv"))){
+  
+  opportunists_fk_abun_csv      = "prep/data/rvc_trophic_groups/opportunists_fk_abun.csv"
+  opportunists_fk_den_csv       = "prep/data/rvc_trophic_groups/opportunists_fk_den.csv"
+  opportunists_fk_bio_csv       = "prep/data/rvc_trophic_groups/opportunists_fk_den_merged.csv"
+  opportunists_fk_diversity_csv = "prep/data/rvc_trophic_groups/opportunists_fk_diversity.csv"
+  
+  if(!all(file.exists(opportunists_fk_abun_csv,opportunists_fk_den_csv,opportunists_fk_bio_csv,opportunists_fk_diversity_csv))){
+    
+    opportunists_spp_list = c("CAR RUBE", "SPH BARR", "ALE CILI","DEC PUNC", "DEC MACA", "CAR CRYS", "CAR BART", "SCO REGA","SPH PICU", "CAR LATU", "SEL VOME", "ELA BIPI", "CAR SPE.", "TRA FALC", "EUT ALLE", "SER RIVO", "SCO MACU", "SER DUME", "SCO CAVA", "SPH GUAC", "CAR LUGU", "OLI SAUR", "SER SPE.", "Rac cana", "Ser zona")
+    
+    #abundance
+    opportunists_fk_abun = getDomainAbundance(RVCdata_FK, opportunists_spp_list, merge_protected = F)
+    write_csv(opportunists_fk_abun, "prep/data/rvc_trophic_groups/opportunists_fk_abun.csv")
+    
+    #density
+    opportunists_fk_den = getDomainDensity(RVCdata_FK, opportunists_spp_list, merge_protected = F)
+    write_csv(opportunists_fk_den, "prep/data/rvc_trophic_groups/opportunists_fk_den.csv")
+    
+    #biomass
+    opportunists_fk_bio = getDomainBiomass(RVCdata_FK, opportunists_spp_list, RVCdata_FK$taxonomic_data)
+    write_csv(opportunists_fk_bio, "prep/data/rvc_trophic_groups/opportunists_fk_bio_merged.csv")
+    
+    #diversity
+    opportunists_fk_abundance = opportunists_fk_abun %>% 
+      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
+      group_by(YEAR, protected_status) %>% #48 groups 
+      nest(-YEAR) %>%  
+      mutate(
+        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
+        #species richness 
+        richness = map(
+          data_wide, 
+          function(x) specnumber(x)),
+        #simpson diversity as effective number of species 
+        simpson = map( 
+          data_wide,
+          function(x) 1/(1 - diversity(x, index = 'simpson'))),
+        #shannon diversity as effective number of species 
+        shannon = map(
+          data_wide,
+          function(x) exp(diversity(x, index = 'shannon')))) %>%
+      unnest(richness, simpson, shannon)
+    
+    opportunists_fk_diversity = opportunists_fk_abundance %>%
+      select(YEAR, protected_status, richness, simpson, shannon) 
+    write_csv(opportunists_fk_diversity, "prep/data/rvc_trophic_groups/opportunists_fk_diversity.csv")
+    
+  }else{
+    
+    #abundance
+    opportunists_abun = read_csv("prep/data/rvc_trophic_groups/hogfish_fk_abun.csv")
+    
+    opportunists_abun = opportunists_fk_abun %>%
+      group_by(YEAR) %>%
+      summarize(
+        abundance_mean = mean(abundance),
+        abundance_n = length(abundance),
+        abundance_sd = sd(abundance),
+        abundance_se = abundance_sd / sqrt(abundance_n),
+        abundance_min = min(abundance),
+        abundance_max = max(abundance))
+    write_csv(opportunists_abun, "prep/data/rvc_trophic_groups/opportunists_abun.csv")
+    
+    #biomass
+    opportunists_bio = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_bio_merged.csv")
+    
+    opportunists_biomass = opportunists_bio %>%
+      group_by(YEAR) %>%
+      summarize(
+        biomass_mean = mean(biomass),
+        biomass_n = length(biomass),
+        biomass_sd = sd(biomass),
+        biomass_se = biomass_sd / sqrt(biomass_n),
+        biomass_min = min(biomass),
+        biomass_max = max(biomass))
+    write_csv(opportunists_biomass, "prep/data/rvc_trophic_groups/opportunists_bio.csv")
+    
+    
+    #density
+    opportunists_den = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_den.csv")
+    
+    opportunists_density = opportunists_den %>%
+      group_by(YEAR) %>%
+      summarize(
+        density_mean = mean(density),
+        density_n = length(density),
+        density_sd = sd(density),
+        density_se = density_sd / sqrt(density_n),
+        density_min = min(density),
+        density_max = max(density))
+    write_csv(opportunists_density, "prep/data/rvc_trophic_groups/opportunists_den.csv")
+    
+    #diversity
+    opportunists_diversity = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_diversity.csv")
+    
+    opportunists_div = opportunists_diversity %>%
+      filter(protected_status != "0") %>%
+      filter(protected_status != "1") %>%
+      select(YEAR, richness, shannon, simpson)
+    write_csv(opportunists_div, "prep/data/rvc_trophic_groups/opportunists_div.csv")
+  }
+}
+
+```
+
 - grunt
 - higher level reef fish
 - small reef reef fish 
-- opportunists 
+
+###Grunts 
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
+|*Anisotremus surinamensis*	    | black margate	      | ANI SURI  |
+|*Anisotremus virginicus*	      | porkfish	          | ANI VIRG  |
+|*Haemulon album*	              | margate	            | HAE ALBU  |
+|*Haemulon aurolineatum*	      | tomtate	            | HAE AURO  | 
+|*Haemulon carbonarium*	        | caesar grunt	      | HAE CARB  |
+|*Haemulon chrysargyreum*       |	smallmouth grunt	  | HAE CHRY  |
+|*Haemulon flavolineatum*       |	french grunt	      | HAE FLAV  |
+|*Haemulon macrostomum*	        | spanish grunt	      | HAE MACR  |
+|*Haemulon melanurum*	          | cottonwick	        | HAE MELA  |
+|*Haemulon parra*               |	sailors choice	    | HAE PARR  |
+|*Haemulon plumierii*           |	white grunt	        | HAE PLUM  | 
+|*Haemulon sciurus*             |	bluestriped grunt	  | HAE SCIU  |
+|*Haemulon sp.*                 |	grunt species	      | HAE SPE.  |
+|*Haemulon striatum*            |	striped grunt	      | HAE STRI  | 
+
+### Small Reef Fish
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
+
+### Higher Level Reef Fish
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
 
 ```{r grunt etc.}
 
@@ -545,17 +832,11 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/grunt_etc_abun.csv",
   small_reef_fk_den_csv         = "prep/data/rvc_trophic_groups/small_reef_fk_den.csv"
   small_reef_fk_bio_csv         = "prep/data/rvc_trophic_groups/small_reef_fk_bio_merged.csv"
   small_reef_fk_diversity_csv   = "prep/data/rvc_trophic_groups/small_reef_fk_diversity.csv"
-  opportunists_fk_abun_csv      = "prep/data/rvc_trophic_groups/opportunists_fk_abun.csv"
-  opportunists_fk_den_csv       = "prep/data/rvc_trophic_groups/opportunists_fk_den.csv"
-  opportunists_fk_bio_csv       = "prep/data/rvc_trophic_groups/opportunists_fk_den_merged.csv"
-  opportunists_fk_diversity_csv = "prep/data/rvc_trophic_groups/opportunists_fk_diversity.csv"
-  
   
   
   if(!all(file.exists(grunt_fk_abun_csv,grunt_fk_den_csv,grunt_fk_bio_csv,grunt_fk_diversity_csv,
                       higher_reef_fk_abun_csv,higher_reef_fk_den_csv,higher_reef_fk_bio_csv,higher_reef_fk_diversity_csv,
-                      small_reef_fk_abun_csv,small_reef_fk_den_csv,small_reef_fk_bio_csv,small_reef_fk_diversity_csv,
-                      opportunists_fk_abun_csv,opportunists_fk_den_csv,opportunists_fk_bio_csv,opportunists_fk_diversity_csv))){
+                      small_reef_fk_abun_csv,small_reef_fk_den_csv,small_reef_fk_bio_csv,small_reef_fk_diversity_csv))){
     
     grunt_spp_list = c("HAE SCIU", "HAE AURO", "HAE PLUM", "HAE SPE.", "HAE FLAV", "HAE CHRY", "ANI VIRG","HAE MELA", "HAE CARB", "HAE PARR", "HAE STRI", "HAE MACR", "ANI SURI", "HAE ALBU")
     
@@ -635,45 +916,6 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/grunt_etc_abun.csv",
       select(YEAR, protected_status, richness, simpson, shannon) 
     write_csv(higher_reef_diversity, "prep/data/rvc_trophic_groups/higher_reef_fk_diversity.csv")
     
-    opportunists_spp_list = c("CAR RUBE", "SPH BARR", "ALE CILI","DEC PUNC", "DEC MACA", "CAR CRYS", "CAR BART", "SCO REGA","SPH PICU", "CAR LATU", "SEL VOME", "ELA BIPI", "CAR SPE.", "TRA FALC", "EUT ALLE", "SER RIVO", "SCO MACU", "SER DUME", "SCO CAVA", "SPH GUAC", "CAR LUGU", "OLI SAUR", "SER SPE.", "Rac cana", "Ser zona")
-    
-    #abundance
-    opportunists_fk_abun = getDomainAbundance(RVCdata_FK, opportunists_spp_list, merge_protected = F)
-    write_csv(opportunists_fk_abun, "prep/data/rvc_trophic_groups/opportunists_fk_abun.csv")
-    
-    #density
-    opportunists_fk_den = getDomainDensity(RVCdata_FK, opportunists_spp_list, merge_protected = F)
-    write_csv(opportunists_fk_den, "prep/data/rvc_trophic_groups/opportunists_fk_den.csv")
-    
-    #biomass
-    opportunists_fk_bio = getDomainBiomass(RVCdata_FK, opportunists_spp_list, RVCdata_FK$taxonomic_data)
-    write_csv(opportunists_fk_bio, "prep/data/rvc_trophic_groups/opportunists_fk_bio_merged.csv")
-    
-    #diversity
-    opportunists_fk_abundance = opportunists_fk_abun %>% 
-      select(YEAR, protected_status, SPECIES_CD, abundance) %>%  
-      group_by(YEAR, protected_status) %>% #48 groups 
-      nest(-YEAR) %>%  
-      mutate(
-        data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill = 0)), 
-        #species richness 
-        richness = map(
-          data_wide, 
-          function(x) specnumber(x)),
-        #simpson diversity as effective number of species 
-        simpson = map( 
-          data_wide,
-          function(x) 1/(1 - diversity(x, index = 'simpson'))),
-        #shannon diversity as effective number of species 
-        shannon = map(
-          data_wide,
-          function(x) exp(diversity(x, index = 'shannon')))) %>%
-      unnest(richness, simpson, shannon)
-    
-    opportunists_fk_diversity = opportunists_fk_abundance %>%
-      select(YEAR, protected_status, richness, simpson, shannon) 
-    write_csv(opportunists_fk_diversity, "prep/data/rvc_trophic_groups/opportunists_fk_diversity.csv")
-    
     small_reef_fish_spp_list = c("COR PERS","ACA COER","KYP SECT","ACA BAHI","ACA CHIR","COR GLAU","ELA OCEA","GNA THOM","PTE CALL","ACA SPE.","MAL TRIA","COR DICR","PAR MARM","MAL MACR","OPH MACC","CTE SAEP","MIC CARR","PTE HELE","HEM SIMU","SCA CRIS","COR EIDO","GOB SPE.","TYL CROC","MIC MICR","ACA ASPE","COR SPE.","BLE SPE.","STR NOTA","MEL NIGE","HYP BERM","EMB PAND","ELA EVEL","ACA CHAP","EMB BAHA","COR LIPE","NES LONG","ENN BOEH","ACA MARI","LAB NUCH","MAL VERS","MAL GILL","ELA MACR","PRI HIPO","GOB DILE","ELA SAUC","ELA XANT","STR TIMU","MAL AURO","PAR MARN","CHA LIMB","OXY STIG","ELA HORS","PAR NIGR","COR PUNC","ACA SPIN","BOL BOQU","ElA RAND","LAB KALI","LAB NIGR","ENN ALTI")
     
     #abundance
@@ -718,10 +960,9 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/grunt_etc_abun.csv",
   #abundance data 
   grunt_abun        = read_csv("prep/data/rvc_trophic_groups/snapper_fk_abun.csv")
   higher_reef_abun  = read_csv("prep/data/rvc_trophic_groups/seabass_fk_abun.csv")
-  opportunists_abun = read_csv("prep/data/rvc_trophic_groups/hogfish_fk_abun.csv")
   small_reef_abun   = read_csv("prep/data/rvc_trophic_groups/grouper_fk_abun.csv")
   
-  grunt_etc_abun = rbind(grunt_abun,higher_reef_abun,opportunists_abun,small_reef_abun) #1999-2016 
+  grunt_etc_abun = rbind(grunt_abun,higher_reef_abun,small_reef_abun) #1999-2016 
   
   grunt_etc_abun = grunt_etc_abun %>%
     group_by(YEAR) %>%
@@ -737,7 +978,6 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/grunt_etc_abun.csv",
   #biomass data 
   grunt_bio = read_csv("prep/data/rvc_trophic_groups/grunt_fk_bio_merged.csv")
   higher_reef_bio = read_csv("prep/data/rvc_trophic_groups/higher_reef_fk_bio_merged.csv")
-  opportunists_bio = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_bio_merged.csv")
   small_reef_bio = read_csv("prep/data/rvc_trophic_groups/small_reef_fk_bio_merged.csv")
   
   grunt_etc_bio = rbind(grunt_bio,higher_reef_bio,opportunists_bio,small_reef_bio) #1999-2016 
@@ -756,10 +996,9 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/grunt_etc_abun.csv",
   #density data 
   grunt_den = read_csv("prep/data/rvc_trophic_groups/grunt_fk_den.csv")
   higher_reef_den = read_csv("prep/data/rvc_trophic_groups/higher_reef_fk_den.csv")
-  opportunists_den = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_den.csv")
   small_reef_den = read_csv("prep/data/rvc_trophic_groups/small_reef_fk_den.csv")
   
-  grunt_etc_den = rbind(grunt_den,higher_reef_den,opportunists_den,small_reef_den) #1999-2016 
+  grunt_etc_den = rbind(grunt_den,higher_reef_den,small_reef_den) #1999-2016 
   
   grunt_etc_den = grunt_etc_den %>%
     group_by(YEAR) %>%
@@ -775,10 +1014,9 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/grunt_etc_abun.csv",
   #diversity data 
   grunt_diversity = read_csv("prep/data/rvc_trophic_groups/grunt_fk_diversity.csv")
   higher_reef_diversity = read_csv("prep/data/rvc_trophic_groups/higher_reef_fk_diversity.csv")
-  opportunists_diversity = read_csv("prep/data/rvc_trophic_groups/opportunists_fk_diversity.csv")
   small_reef_diversity = read_csv("prep/data/rvc_trophic_groups/small_reef_fk_diversity.csv")
   
-  grunt_etc_diversity = rbind(grunt_diversity,higher_reef_diversity,opportunists_diversity,small_reef_diversity) #1994-2016 
+  grunt_etc_diversity = rbind(grunt_diversity,higher_reef_diversity,small_reef_diversity) #1994-2016 
   
   grunt_etc_diversity = grunt_etc_diversity %>%
     filter(protected_status != "0") %>%
@@ -809,9 +1047,19 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/grunt_etc_abun.csv",
 
 ```
 
-- rays 
+### Rays
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
+|*Aetobatus narinari*	          | spotted eagle ray	  | AET NARI  |
+|*Dasyatis americana*	          | southern stingray	  | DAS AMER  |
+|*Echeneis naucrates*	          | sharksucker	        | ECH NAUC  |
+|*Narcine bancroftii*	          | lesser electric ray	| NAR BANC  |
+|*Rhinoptera bonasus*	          | cownosed ray	      | RHI BONA  |
+|*Urobatis jamaicensis*	        | yellow stingray	    | URO JAMA  |
 
 ```{r rays}
+
 if(!all(file.exists("prep/data/rvc_trophic_groups/rays_abun.csv",
                     "prep/data/rvc_trophic_groups/rays_den.csv",
                     "prep/data/rvc_trophic_groups/rays_bio.csv",
@@ -912,7 +1160,22 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/rays_abun.csv",
 }
 ```
 
-- sharks 
+### Sharks
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
+|*Carcharhinus falciformis*	    | silky shark	        | CAR FALC  |
+|*Carcharhinus leucas*	        | bull shark	        | CAR LEUC  |
+|*Carcharhinus limbatus*	      | blacktip shark	    | CAR LIMB  |
+|*Carcharhinus obscurus*	      | dusky shark	        | CAR OBSC  |
+|*Carcharhinus plumbeus*	      | sandbar shark	      | CAR PLUM  |
+|*Carcharhinus perezii*	        | reef shark	        | CAR PERE  |
+|*Galeocerdo cuvieri*	          | tiger shark	        | GAL CUVI  | 
+|*Ginglymostoma cirratum*	      | nurse shark	        | GIN CIRR  |
+|*Negaprion brevirostris*	      | lemon shark	        | Neg BREV  |
+|*Sphyrna mokarran*	            | great hammerhead	  | SPH MOKA  |
+|*Sphyrna tiburo*	              | bonnethead	        | SPH TIBU  |
+|*Sphyrna lewini*	              | scalloped hammerhead| SPH LEWI  |
 
 ```{r sharks}
 
@@ -1016,7 +1279,11 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/sharks_abun.csv",
 }
 ```
 
-- lionfish
+### Lionfish
+
+| Scientific name               | Common name         | RVC code  |  
+|:------------------------------|:--------------------|:----------|
+|*Pterois volitans*             | red lionfish        | PTE VOLI  |
 
 ```{r lionfish}
 
@@ -1155,38 +1422,147 @@ if(!file.exists("prep/data/rvc_trophic_level/trophic_level_biomass.csv")){
 
 ```{r exploited reef fish}
 
+if(!all(file.exists("prep/data/rvc_exploited_species/exploited_den.csv",
+                    "prep/data/rvc_exploited_species/exploited_bio.csv",
+                    "prep/data/rvc_exploited_species/exploited_abun.csv"))){
+  
+  exploited_fk_abun_csv = "prep/data/rvc_exploited_species/exploited_fk_abun.csv"
+  exploited_fk_den_csv  = "prep/data/rvc_exploited_species/exploited_fk_den.csv"
+  exploited_fk_bio_csv  = "prep/data/rvc_exploited_species/exploited_fk_bio.csv"
+  
+}else{ 
+  if(!all(file.exists(exploited_fk_abun_csv, exploited_fk_den_csv, exploited_fk_bio_csv))){
+    
+    exploited_spp_list= c(
+      "CEP CRUE", #Graysby
+      "EPI ITAJ", #Goliath Grouper 
+      "EPI MORI", #Red Grouper
+      "EPI STRI", #Nassau Grouper 
+      "LAC MAXI", #Hogfish
+      "LUT ANAL", #Mutton Snapper
+      "LUT GRIS", #Grey Snapper    
+      "MYC BONA", #Black Grouper
+      "OCY CHRY" #Yellowtail Snapper 
+    )
+    #abundance
+    exploited_fk_abun <- getDomainAbundance(RVCdata_FK, species = exploited_spp_list, merge_protected = F)
+    write_csv(exploited_fk_abun,"prep/data/rvc_exploited_species/exploited_fk_abun.csv")
+    
+    #density 
+    exploited_fk_den <- getDomainDensity(RVCdata_FK, species = exploited_spp_list, merge_protected = F)
+    write_csv(exploited_fk_den,"prep/data/rvc_exploited_species/exploited_fk_den.csv")
+    
+    #biomass 
+    exploited_fk_bio <- getDomainBiomass(RVCdata_FK, species = exploited_spp_list, growth_parameters = RVCdata_FK$taxonomic_data, merge_protected = F)
+    write_csv(exploited_fk_bio,"prep/data/rvc_exploited_species/exploited_fk_bio.csv")
+  }
+  
+  exploited_den = read_csv("prep/data/rvc_exploited_species/exploited_fk_den.csv")
+  
+  exploited_density = exploited_den %>%
+    mutate(
+      protected_status = recode(
+        protected_status, '0'='unprotected', '1'='protected'), 
+      common_name = recode(
+        SPECIES_CD,
+        'CEP CRUE' = 'Graysby',
+        'EPI ITAJ' = 'Goliath_Grouper',
+        'EPI MORI' = 'Red_Grouper',
+        'EPI STRI' = 'Nassau_Grouper',
+        'LAC MAXI' = 'Hogfish',
+        'LUT ANAL' = 'Mutton_Snapper',
+        'LUT GRIS' = 'Grey_Snapper',
+        'MYC BONA' = 'Black_Grouper',
+        'OCY CHRY' = 'Yellowtail_Snapper')) %>% 
+    select(YEAR, common_name, protected_status, density) %>%
+    group_by(YEAR, common_name, protected_status) %>%
+    filter(protected_status != "all") 
+  
+  write_csv(exploited_density, "prep/data/rvc_exploited_species/exploited_den.csv")
+  
+  exploited_bio = read_csv("prep/data/rvc_exploited_species/exploited_fk_bio.csv")
+  
+  exploited_biomass = exploited_bio %>%
+    mutate(
+      protected_status = recode(
+        protected_status, '0'='unprotected', '1'='protected'), 
+      common_name = recode(
+        SPECIES_CD,
+        'CEP CRUE' = 'Graysby',
+        'EPI ITAJ' = 'Goliath_Grouper',
+        'EPI MORI' = 'Red_Grouper',
+        'EPI STRI' = 'Nassau_Grouper',
+        'LAC MAXI' = 'Hogfish',
+        'LUT ANAL' = 'Mutton_Snapper',
+        'LUT GRIS' = 'Grey_Snapper',
+        'MYC BONA' = 'Black_Grouper',
+        'OCY CHRY' = 'Yellowtail_Snapper')) %>% 
+    select(YEAR, common_name, protected_status, biomass) %>%
+    group_by(YEAR, common_name, protected_status) %>%
+    filter(protected_status != "all") 
+  
+  write_csv(exploited_biomass, "prep/data/rvc_exploited_species/exploited_bio.csv")
+  
+  exploited_abun = read_csv("prep/data/rvc_exploited_species/exploited_fk_abun.csv")
+  
+  exploited_abundance = exploited_abun %>%
+    mutate(
+      protected_status = recode(
+        protected_status, '0'='unprotected', '1'='protected'), 
+      common_name = recode(
+        SPECIES_CD,
+        'CEP CRUE' = 'Graysby',
+        'EPI ITAJ' = 'Goliath_Grouper',
+        'EPI MORI' = 'Red_Grouper',
+        'EPI STRI' = 'Nassau_Grouper',
+        'LAC MAXI' = 'Hogfish',
+        'LUT ANAL' = 'Mutton_Snapper',
+        'LUT GRIS' = 'Grey_Snapper',
+        'MYC BONA' = 'Black_Grouper',
+        'OCY CHRY' = 'Yellowtail_Snapper')) %>% 
+    select(YEAR, common_name, protected_status, abundance) %>%
+    group_by(YEAR, common_name, protected_status) %>%
+    filter(protected_status != "all") 
+  
+  write_csv(exploited_abundance, "prep/data/rvc_exploited_species/exploited_abun.csv")
+  
+}
+
 ```
 
 - reef fish biodiversity 
 
 ```{r reef fish biodiversity}
 
-if(!file.exists("prep/data/domain_div.csv"))
+if(!file.exists("prep/data/domain_div.csv")){
 
-domain_abun = read_csv("C:/Users/mhepn/Documents/RVC/big_csv/abundance_domain/domain_fk_abun.csv") #1307 KB
+  domain_abun = read_csv("C:/Users/mhepn/Documents/RVC/big_csv/abundance_domain/domain_fk_abun.csv") #1307 KB
 
-domain_div = domain_abun %>%
-  filter(protected_status == "all") %>%
-  select(YEAR, SPECIES_CD, abundance) %>%
-  group_by(YEAR) %>%
-  nest(-YEAR) %>%
-  mutate(
-    data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill =0)),
-    richness = map(data_wide, function(x) specnumber(x)),
-    simpson  = map(data_wide, function(x) 1/(1 - diversity(x, index = 'simpson'))),
-    shannon = map(data_wide,  function(x) exp(diversity(x,  index = 'shannon')))) %>% 
+  domain_div = domain_abun %>%
+    filter(protected_status == "all") %>%
+    select(YEAR, SPECIES_CD, abundance) %>%
+    group_by(YEAR) %>%
+    nest(-YEAR) %>%
+    mutate(
+      data_wide = map(data, ~ spread(data=.x, SPECIES_CD, abundance, fill =0)),
+      richness = map(data_wide, function(x) specnumber(x)),
+      simpson  = map(data_wide, function(x) 1/(1 - diversity(x, index = 'simpson'))),
+      shannon = map(data_wide,  function(x) exp(diversity(x,  index = 'shannon')))) %>% 
     unnest(richness, simpson, shannon)
 
-domain_div = domain_div %>%
-  select(YEAR, richness, simpson, shannon)
+  domain_div = domain_div %>%
+    select(YEAR, richness, simpson, shannon)
 
-write_csv(domain_div, "prep/data/domain_div.csv")
+  write_csv(domain_div, "prep/data/domain_div.csv")
+}
 
 ```
 
 - queen conch
 
 ```{r queen conch}
+
+queen_conch = read_csv("prep/data/queen_conch/QueenConchData.csv")
 
 ```
 
