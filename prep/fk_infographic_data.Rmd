@@ -1381,7 +1381,7 @@ if(!all(file.exists("prep/data/rvc_trophic_groups/lionfish_abun.csv",
 
 ```
 
-- trophic pyramid 
+### Trophic pyramid 
 
 ```{r trophic pyramid}
 
@@ -1418,7 +1418,19 @@ if(!file.exists("prep/data/rvc_trophic_level/trophic_level_biomass.csv")){
 
 ```
 
-- exploited reef fish 
+### Exploited reef fish 
+
+| Scientific name               | Common name         | RVC code  | Comment     |
+|:------------------------------|:--------------------|:----------|-------------|
+|*Cephalopholis cruentata*      | Graysby             | CEP CRUE  | exploited   |
+|*Epinephelus itajara*          | Goliath grouper     | EPI ITAJ  | moritorium  |
+|*Epinephelus striatus*         | Nassau grouper      | EPI STRI  | moritorium  |
+|*Epinephelus Morio*            | Red grouper         | EPI MORI  | exploited   |
+|*Lachnolaimus maximus*         | Hogfish             | LAC MAXI  | exploited   |
+|*Lutjanus analis*              | Mutton snapper      | LUT ANAL  | exploited   |
+|*Lutjanus griseus*             | Grey snapper        | LUT GRIS  | exploited   |
+|*Mycteroperca bonaci*          | Black grouper       | MYC BONA  | exploited   |
+|*Ocyurus chrysurus*            | Yellowtail snapper  | OCY CHRY  | exploited   |
 
 ```{r exploited reef fish}
 
@@ -1562,13 +1574,20 @@ if(!file.exists("prep/data/domain_div.csv")){
 
 ```{r queen conch}
 
-queen_conch = read_csv("prep/data/queen_conch/QueenConchData.csv")
+queen_conch = read_csv("prep/data/queen_conch/QueenConchData.csv") #1993-2013
+
+toupper(names(queen_conch))
 
 ```
 
 - caribbean spiny lobster 
 
 ```{r caribbean spiny lobster}
+
+lobster = read_csv("prep/data/lobster/Lobster_landings.csv") #1991-2015
+
+toupper(names(lobster))
+#"Year","Commercial_lbs","Recreational_lbs","Total"  
 
 ```
 
@@ -1577,6 +1596,108 @@ queen_conch = read_csv("prep/data/queen_conch/QueenConchData.csv")
 - macroalgae 
 - sponges 
 
-```{foundation species}
+| Scientific name                         | Common name                                   | code                                        | 
+|:----------------------------------------|:----------------------------------------------|:--------------------------------------------|
+|*ACROPORA PALMATA*                       | elkhorn coral                                 |"ACROPORA.PALMATA"                           |
+|*ACROPORA PROLIFERA*                     | fused staghorn coral                          |"ACROPORA.PROLIFERA"                         |
+|*ACROPORA CERVICORNIS*                   | staghorn coral                                |"ACROPORA.CERVICORNIS"                       |
+|*AGARICIA FRAGILIS*                      | leaf lettuce coral                            |"AGARICIA.FRAGILIS"                          |
+|*AGARICIA LAMARCKI*                      | lamarckis sheet coral                         |"AGARICIA.LAMARCKI"                          |              
+|*CLADOCORA ARBUSCULA*                    | tube coral                                    |"CLADOCORA.ARBUSCULA"                        |
+|*COLPOPHYLLIA NATANS*                    | boulder brain coral/large-grooved brain coral |"COLPOPHYLLIA.NATANS"                        |
+|*DENDROGYRA CYLINDRUS*                   | pillar coral                                  |"DENDROGYRA.CYLINDRUS"                       |  
+|*DICHOCOENIA STOKESII*                   | pineapple coral/elliptical star coral         |"DICHOCOENIA.STOKESII"                       |        
+|*DIPLORIA LABYRINTHIFORMIS*              | grooved brain coral                           |"DIPLORIA.LABYRINTHIFORMIS"                  | 
+|*EUSMILIA FASTIGIATA*                    | smooth flower coral                           |"EUSMILIA.FASTIGIATA"                        |
+|*FAVIA FRAGUM*                           | golfball coral                                |"FAVIA.FRAGUM"                               |     
+|*HELIOSERIS.CUCULLATA*                   | sunray lettuce coral                          |"HELIOSERIS.CUCULLATA"                       |         
+|*ISOPHYLLIA SINUOSA*                     | sinuous cactus coral                          |"ISOPHYLLIA.SINUOSA"                         |
+|*ISOPHYLLIA RIGIDA*                      | rough star coral                              |"ISOPHYLLIA.RIGIDA"                          | 
+|*MADRACIS DECACTIS.COMPLEX*              | NA                                            |"MADRACIS.DECACTIS.COMPLEX"                  | 
+|*MADRACIS AURENTENRA*                    | Yellow pencil coral                           |"MADRACIS.AURENTENRA"                        |
+|*MANICINA AREOLATA*                      | rose coral                                    |"MANICINA.AREOLATA"                          |         
+|*MEANDRINA MEANDRITES*                   | maze coral                                    |"MEANDRINA.MEANDRITES"                       |            
+|*MILLEPORA COMPLANATA*                   | blade fire coral                              |"MILLEPORA.COMPLANATA"                       |  
+|*MILLEPORA ALCICORNIS*                   | sea ginger                                    |"MILLEPORA.ALCICORNIS"                       | 
+|*MONTASTRAEA CAVERNOSA*                  | great star coral                              |"MONTASTRAEA.CAVERNOSA"                      |           
+|*MUSSA ANGULOSA*                         | spiny flower coral/large flower coral         |"MUSSA.ANGULOSA"                             |
+|*MYCETOPHYLLIA LAMARCKIANA.COMPLEX*      | NA                                            |"MYCETOPHYLLIA.LAMARCKIANA.COMPLEX"          |
+|*MYCETOPHYLLIA FEROX*                    | Rough Cactus Coral                            |"MYCETOPHYLLIA.FEROX"                        |       
+|*MYCETOPHYLLIA ALICIAE*                  | Knobby Cactus Coral                           |"MYCETOPHYLLIA.ALICIAE"                      |
+|*OCULINA ROBUSTA*                        | Ivory tree coral                              |"OCULINA.ROBUSTA"                            |      
+|*OCULINA DIFFUSA*                        | Ivory Bush Coral                              |"OCULINA.DIFFUSA"                            |
+|*ORBICELLA ANNULARIS.COMPLEX*            | NA                                            |"ORBICELLA.ANNULARIS.COMPLEX"                |
+|*PORITES ASTREOIDES*                     | mustard hill coral                            |"PORITES.ASTREOIDES"                         |
+|*PORITES PORITES COMPLEX*                | NA                                            |"PORITES.PORITES.COMPLEX"                    |
+|*PSEUDODIPLORIA STRIGOSA*                | symmetrical brain coral                       |"PSEUDODIPLORIA.STRIGOSA"                    |
+|*PSEUDODIPLORIA CLIVOSA*                 | knobby brain coral                            |"PSEUDODIPLORIA.CLIVOSA"                     |
+|*SCLERACTINIA SP*                        | NA                                            |"SCLERACTINIA"                               |
+|*SCOLYMIA SP*                            | NA                                            |"SCOLYMIA.SP_"                               |
+|*SIDERASTREA SIDEREA*                    | massive starlet coral/round starlet coral     |"SIDERASTREA.SIDEREA"                        |
+|*SIDERASTREA RADIANS*                    | lesser starlet coral/shallow-water starlet coral|"SIDERASTREA.RADIANS"                      |
+|*SOLENASTREA BOURNONI*                   | smooth star coral                             |"SOLENASTREA.BOURNONI"                       |
+|*STEPHANOCOENIA INTERSEPTA*              | blushing star coral                           |"STEPHANOCOENIA.INTERSEPTA"                  |
+|*UNDARIA AGARICITES COMPLEX*             | NA                                            |"UNDARIA.AGARICITES.COMPLEX"                 |
+
+
+```{r foundation species}
+
+if(!file.exists("coral_div.csv")){
+  
+  ##Megan: working off Luke's code 
+  sc_pcov_spp= read_csv("prep/data/CREMP/CREMP_Pcover_spp_tpose.csv") #20*41
+  toupper(names(sc_pcov_spp))
+  # "YEAR"                              "PSEUDODIPLORIA.STRIGOSA"           "UNDARIA.AGARICITES.COMPLEX"       
+  # "STEPHANOCOENIA.INTERSEPTA"         "SOLENASTREA.BOURNONI"              "SIDERASTREA.SIDEREA"              
+  # "SIDERASTREA.RADIANS"               "SCOLYMIA.SP_"                      "SCLERACTINIA"                     
+  # "PORITES.ASTREOIDES"                "PSEUDODIPLORIA.CLIVOSA"            "PORITES.PORITES.COMPLEX"          
+  # "ISOPHYLLIA.RIGIDA"                 "ORBICELLA.ANNULARIS.COMPLEX"       "OCULINA.ROBUSTA"                  
+  # "OCULINA.DIFFUSA"                   "MYCETOPHYLLIA.LAMARCKIANA.COMPLEX" "MYCETOPHYLLIA.FEROX"              
+  # "MYCETOPHYLLIA.ALICIAE"             "MONTASTRAEA.CAVERNOSA"             "MUSSA.ANGULOSA"                   
+  # "MEANDRINA.MEANDRITES"              "MILLEPORA.COMPLANATA"              "MILLEPORA.ALCICORNIS"             
+  # "MADRACIS.DECACTIS.COMPLEX"         "MANICINA.AREOLATA"                 "MADRACIS.AURENTENRA"              
+  # "ISOPHYLLIA.SINUOSA"                "ACROPORA.CERVICORNIS"              "HELIOSERIS.CUCULLATA"             
+  # "ACROPORA.PALMATA"                  "ACROPORA.PROLIFERA"                "AGARICIA.FRAGILIS"                
+  # "AGARICIA.LAMARCKI"                 "CLADOCORA.ARBUSCULA"               "DENDROGYRA.CYLINDRUS"             
+  # "COLPOPHYLLIA.NATANS"               "DICHOCOENIA.STOKESII"              "DIPLORIA.LABYRINTHIFORMIS"        
+  # "FAVIA.FRAGUM"                      "EUSMILIA.FASTIGIATA"  
+  
+  #Estimate Coral shannon/simpson diversity using Average site level percent cover. Richness is estimated from the full domain of CREMP samples, rather than average site level richness.
+  
+  coral_diversity = sc_pcov_spp %>%
+    gather(key=CORAL_SPP, value=measurement, -Year) %>%
+    group_by(Year) %>%
+    nest(-Year) %>%
+    mutate(
+      data_wide = map(data, ~ spread(data=.x, CORAL_SPP, measurement, fill =0)),
+      richness = map(data_wide, function(x) specnumber(x)),
+      simpson  = map(data_wide, function(x) 1/(1 - diversity(x, index = 'simpson'))),
+      shannon = map(data_wide,  function(x) exp(diversity(x,  index = 'shannon')))) %>% 
+    unnest(richness, simpson, shannon)
+  
+  coral_div = coral_diversity %>%
+    select(Year, richness, simpson, shannon)
+  
+  write_csv(coral_div, "prep/data/coral_div.csv")
+  
+  cremp_abund = read_csv("prep/data/CREMP/CREMP_Pcover_group.csv") #1996-2015
+  #Parsed with column specification:
+  #cols(
+    #Year = col_integer(),
+    #Macroalgae = col_double(),
+    #Cyano = col_double(),
+    #Octocoral = col_double(),
+    #Others = col_double(),
+    #Porifera = col_double(),
+    #Seagrass = col_double(),
+    #`Stony Coral` = col_double(),
+    #Zoanthidea = col_double(),
+    #Urchins = col_double()
+)
+  
+  crichness = read_csv("prep/data/CREMP/CREMP_Domain_Coral_Richness.csv") #1996-2015
+  toupper(names(crichness)) #"ROW LABELS","DOMAIN RICHNESS"
+}
+  
 
 ```
