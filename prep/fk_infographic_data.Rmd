@@ -1554,7 +1554,10 @@ if(!all(file.exists("prep/data/rvc_exploited_species/exploited_den.csv",
 
 if(!file.exists("prep/data/domain_div.csv")){
 
-  domain_abun = read_csv("C:/Users/mhepn/Documents/RVC/big_csv/abundance_domain/domain_fk_abun.csv") #1307 KB
+  #domain_abun = read_csv("C:/Users/mhepn/Documents/RVC/big_csv/abundance_domain/domain_fk_abun.csv") #1307 KB
+  #write_rds(domain_abun, "prep/data/domain_abun")
+  
+  domain_abun = read_rds("domain_abun")
 
   domain_div = domain_abun %>%
     filter(protected_status != "all") %>%
