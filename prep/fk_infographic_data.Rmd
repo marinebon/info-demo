@@ -14,6 +14,10 @@ library(vegan)
 library(dygraphs)
 library(grDevices)
 library(RColorBrewer)
+library(devtools)
+library(servr) #needed servr to get infographiq to install 
+devtools::install_github('marinebon/infographiq')
+library(infographiq)
 
 ```
 
@@ -1702,11 +1706,16 @@ if(!file.exists("coral_div.csv")){
     #`Stony Coral` = col_double(),
     #Zoanthidea = col_double(),
     #Urchins = col_double()
-)
   
   crichness = read_csv("prep/data/CREMP/CREMP_Domain_Coral_Richness.csv") #1996-2015
   toupper(names(crichness)) #"ROW LABELS","DOMAIN RICHNESS"
 }
-  
 
 ```
+
+```{r practice coral infographic}
+
+test1 = infographiq::create_info_site(path_root = ".",
+                 #dir_svg = "",
+                 elements_csv = "svg_elements.csv",
+                 indicators_csv = "plot_indicators.csv")
