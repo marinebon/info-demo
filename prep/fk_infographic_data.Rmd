@@ -1719,3 +1719,22 @@ test1 = infographiq::create_info_site(path_root = ".",
                  #dir_svg = "",
                  elements_csv = "svg_elements.csv",
                  indicators_csv = "plot_indicators.csv")
+
+plot_indicators = read_csv("plot_indicators.csv", 
+                           title   = 'Shark Richness',
+                           y_label = 'Effective number of species'))
+#Parsed with column specification:
+#cols(
+  # Classification_level = col_character(),
+  # svg_id = col_character(),
+  # plot_title = col_character(),
+  # filter = col_character(),
+  # col_t = col_character(),
+  # col_y = col_character(),
+  # col_se = col_character(),
+  # y_label = col_character(),
+  # group_by = col_character(),
+  # csv_url = col_character(),
+  # direct_path = col_character())
+
+plot_timeseries("https://github.com/marinebon/info-fk/blob/master/prep/data/rvc_trophic_groups/sharks_div.csv")
