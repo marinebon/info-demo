@@ -5,4 +5,6 @@
 
 # this script assumes you have already installed the infographiq package
 # devtools::install_github('marinebon/infographiq')
-infographiq::create_info_site(render_modals = F)
+infographiq::create_info_site(
+    render_modals = T
+)
