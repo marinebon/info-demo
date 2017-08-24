@@ -1,5 +1,5 @@
 ---
-title: "Prep Infographic Data" 
+title: "Prep Infographic Data"
 author: "Ben Best"
 date: "`r Sys.Date()`"
 output:
@@ -55,7 +55,7 @@ svg_ids = function(svg){
   ids = read_xml(svg) %>%
     xml_find_all("//svg:g") %>%
     xml_attr('id')
-  
+
   ids = ids[!str_detect(ids, '^g\\d+$')]
   if (length(ids)==0){
     return(NA)
@@ -111,7 +111,7 @@ ind_d %>%
 
 ### snapper / grouper ?
 
-Here's any svg_id with the word snapper or grouper in it. Isn't this often thought of as the "snapper grouper complex", so should we aggregate these time series? 
+Here's any svg_id with the word snapper or grouper in it. Isn't this often thought of as the "snapper grouper complex", so should we aggregate these time series?
 
 ```{r}
 ind_d %>%
@@ -127,10 +127,9 @@ ind_d %>%
 ```{r, eval=F}
 load_all('../../infographiq') # reload package from source
 
-create_site()
+create_info_site()
 ```
 
 
 
 ...
-
