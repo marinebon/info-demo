@@ -1,26 +1,28 @@
 svg,svg_id,label,status_text,status_color
-corals.svg,damselfish,Damselfish,,
-corals.svg,biodiversity-icon,Biodiversity,,
-corals.svg,cyano,Cyanobacteria,,
-corals.svg,diadema,Black Sea Urchin (keystone),,
-corals.svg,exploited-reef-fish,Exploited Reef Fish (focal),,
-corals.svg,trophic-pyramid,Trophic Level Pyramid,,
-corals.svg,forage-fish,Forage Fish (trophic group),,
-corals.svg,anemone,Anemone,,
-corals.svg,seagrass,Seagrass (foundation),,
-corals.svg,rays,Rays (trophic group),,
-corals.svg,sharks,Sharks (trophic group),,
-corals.svg,sponge,Sponges,,
-corals.svg,carib-spiny-lobster,Caribbean Spiny Lobster (focal),,
-corals.svg,grouper-snapper-complex,Grouper-Snapper Complex (trophic group),,
-corals.svg,stony-coral,Stony Corals (foundation),,
-corals.svg,lionfish,Lionfish (invasive),,
-corals.svg,soft-coral,Soft Corals (foundation),,
-corals.svg,queen-conch,Queen Conch (focal),,
-corals.svg,other-reef-fish,Other Reef Fish (trophic group),,
-corals.svg,jacks,Jacks (trophic group),,
-corals.svg,parrotfish,Parrotfish (trophic group),,
-corals.svg,other-biota,Other ,,
+corals.svg,damselfish,Damselfish,being_added,#595959
+corals.svg,biodiversity-icon,Biodiversity,being_added,#595959
+corals.svg,cyano,Cyanobacteria,TBD,#595959
+corals.svg,diadema,Black Sea Urchin (keystone),being_added,#383838
+corals.svg,exploited-reef-fish,Exploited Reef Fish (focal),being_added,#595959
+corals.svg,trophic-pyramid,Trophic Level Pyramid,being_added,#595959
+corals.svg,forage-fish,Forage Fish (trophic group),,#383838
+corals.svg,anemone,Anemone,TBD,#383838
+corals.svg,zoanthidea,Zoanthids,TBD,#595959
+corals.svg,seagrass,Seagrass (foundation),being_added,#383838
+corals.svg,rays,Rays (trophic group),next_version,#595959
+corals.svg,sharks,Sharks (trophic group),next_version,#595959
+corals.svg,sponge,Sponges,,#383838
+corals.svg,carib-spiny-lobster,Caribbean Spiny Lobster (focal),,#383838
+corals.svg,grouper-snapper-complex,Grouper-Snapper Complex (trophic group),,#383838
+corals.svg,stony-coral,Stony Corals (foundation),,#383838
+corals.svg,lionfish,Lionfish (invasive),,#383838
+corals.svg,soft-coral,Soft Corals (foundation),,#383838
+corals.svg,queen-conch,Queen Conch (focal),next_version,#595959
+corals.svg,other-reef-fish,Other Reef Fish (trophic group),,#383838
+corals.svg,jacks,Jacks (trophic group),next_version,#595959
+corals.svg,parrotfish,Parrotfish (trophic group),next_version,#595959
+corals.svg,other-biota,Other ,TBD,#595959
+corals.svg,macroalgae,,being_added,#383838
 mangroves.svg,anemone,Anemone,,
 mangroves.svg,aquatic-crabs,,,
 mangroves.svg,carib-spiny-lobster,Caribbean Spiny Lobster,,
@@ -44,3 +46,4 @@ seagrass.svg,queen-conch,Queen Conch,,
 seagrass.svg,seagrass,,,
 seagrass.svg,snapper,Snapper,,
 seagrass.svg,tarpon,,,
+seagrass.svg,yellowtail-snapper,Yellowtail Snapper,,
