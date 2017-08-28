@@ -1,4 +1,4 @@
 svg,svg_id,label,status_text,status_color,modal_text
 corals.svg,stony-coral,Stony Corals (foundation),,#2b2b2b,
 corals.svg,lionfish,Lionfish (invasive),,#2b2b2b,
-corals.svg,parrotfish,Parrotfish (trophic group),,#2b2b2b,prep/plot_caption/parrotfish.Rmd
+corals.svg,parrotfish,Parrotfish (trophic group),,#2b2b2b,captions/parrotfish.md
