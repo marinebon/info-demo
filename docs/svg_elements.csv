@@ -1,0 +1,7 @@
+svg,svg_id,label,status_text,status_color,modal_text
+corals.svg,stony-coral,Stony Corals (foundation),,#002b2b,
+corals.svg,lionfish,Lionfish (invasive),,#2b002b,
+corals.svg,parrotfish,Parrotfish (trophic group),,#2b2b00,captions/parrotfish.md
+seagrass.svg,stony-coral,Stony Corals (foundation),,#2b2b2b,
+seagrass.svg,lionfish,Lionfish (invasive),,#2b2b2b,
+
