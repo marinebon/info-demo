@@ -1,8 +1,1 @@
----
-title: "parrotfish"
-author: "Megan Hepner"
-date: "August 28, 2017"
-output: html_document
----
-
 Parrotfish are grazers that help prevent algae from overgrowing on coral reefs. The Florida Keys trophic group consists of X species from the family *Scaridae*. They are among the most common large fish seen on Caribbean coral reefs. The density, biomass, and diversity indices were computed from the multi-agency Reef Visual Census. Visit [Marine Biodiversity Observation Network github](https://github.com/marinebon/info-fk/blob/master/prep/fk_infographic_data.Rmd) For more information on the study and indices computations. 
