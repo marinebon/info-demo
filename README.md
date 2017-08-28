@@ -2,6 +2,12 @@
 
 This is a simplified demonstration of how to use the [`infographiq`](https://github.com/marinebon/infographiq) package to create your own interactive infographics. This repository contains everything needed to generate the static html website hosted by github in the `./docs` folder.
 
+## getting started
+
+To get started making your own infographic you can use this repository as a starting point. Simply clone or download thi repository, start editing, and building your site using `infographiq::create_info_site()`.
+
+## overview
+
 A basic overview of the functionality is given below. It is recommended that you browse both the code and the resulting website (at https://usf-imars.github.io/info-demo/) as you read through this overview. 
 
 Using the data in this repo, the website is generated into the `./docs` folder by running `create_info_site.R`. Github can then host the website from within the `./docs` directory.
