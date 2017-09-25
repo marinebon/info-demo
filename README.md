@@ -18,4 +18,6 @@ The two svg files are refrenced by name in `svg_elements.csv`. In this file we d
 
 For parrotfish, we want to include some text in the "modal" popup window which appears when the parrotfish silhoutte is clicked. To do this we created a file in markdown format at `./captions/parrotfish.md` and give this value in the `svg_elements.csv` column `modal_after` so that the text is shown after all plots. We do the same for lionfish (and lionfish-2), but use column `modal_before` so that the text is shown before all of the plots.
 
+In addition to the `modal_before` and `modal_after` texts, we add a caption to individual plots using `plot_caption` in `plot_indicators.csv` for the simpson & shannon diversity index plots of parrotfish.
+
 For the plots that show within a modal popup, we use `plot_indicators.csv`. In this file we give the `svg_id` that matches with the ids in the svg file(s) and in `svg_elements.csv`, along with the details to create the plot.
