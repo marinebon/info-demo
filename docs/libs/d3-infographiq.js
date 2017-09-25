@@ -10,9 +10,10 @@ d3.xml(svg_path)
   .mimeType("image/svg+xml")
   .get(function(error, xml) {
     if (error) throw error;
-    //document.body.appendChild(xml.documentElement);
-    //d3.select("#scene").append(xml.documentElement)
-    document.getElementById('scene').appendChild(xml.documentElement);
+
+    var svg_el = document.getElementById('scene').appendChild(xml.documentElement);
+    d3.select(svg_el).attr('width', '100%');
+    d3.select(svg_el).attr('height', '100%');
 
     // read csv
     d3.csv(svg_elements_csv, function(error, data) {
@@ -37,8 +38,8 @@ d3.xml(svg_path)
 
       // iterate over rows of svg paths
       data.forEach(function(d) {
-        var group_selector      = 'g#' + d.svg_id;
-        var g_children_selector = 'g#' + d.svg_id + ' path,' + group_selector;
+        var group_selector      = '#' + d.svg_id;
+        var g_children_selector = '#' + d.svg_id + ' path,' + group_selector;
         var d_link = './modals/' + d.svg_id + '.html';
 
         if (debug_mode){
@@ -64,9 +65,9 @@ d3.xml(svg_path)
         // create list of species in the infographic
         list_text = d.label ? d.label : d.svg_id  // fall back on id if label not set
         d3.select("#svg_id_list").append("li").append("a")
-          .text(d.label)
+          .text(list_text)
           .attr("xlink:href", d_link)
-          .attr("xlink:data-title", d.label)
+          .attr("xlink:data-title", list_text)
           .attr("xlink:data-remote", "false")
           .attr("xlink:data-toggle", "modal")
           .attr("xlink:data-target", "#myModal")
@@ -75,7 +76,7 @@ d3.xml(svg_path)
           .on("click", mark_as_visited);
 
         // link each group in svg to modals
-        d3.selectAll('g#' + d.svg_id)
+        d3.selectAll(group_selector)
           .attr("xlink:href", d_link)
           .attr("xlink:data-title", d.label)
           .attr("xlink:data-remote", "false")
