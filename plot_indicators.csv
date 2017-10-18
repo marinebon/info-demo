@@ -12,3 +12,4 @@ Trophic group,parrotfish,Parrotfish Simpson Diversity,NA,YEAR,simpson,NA,Effecti
 NA,caribean-spiny-lobster,Lobster Caption w/ No Plot,NA,NA,NA,NA,NA,NA,https://not.a.real/link.csv,NA,NA,captions/lobster.md,plot_none
 NA,caribean-spiny-lobster,Lobster Custom Code Eval,NA,NA,NA,NA,NA,NA,https://not.a.real/link.csv,NA,NA,NA,print("This is my custom plotter code all shoved into a single column directly in the csv file (but with no commas)!")
 NA,caribean-spiny-lobster,Lobster Custom Code Eval (with commas!),NA,NA,NA,NA,NA,NA,https://not.a.real/link.csv,NA,NA,NA,"print(""This is my custom plotter code all shoved into a single column directly in the csv file AND a bunch of commas: ,,,,,a,b,c,123,,,!"")"
+NA,caribean-spiny-lobster,Custom Lobster Plot Title,NA,fake-x-axis,fake-y-axis,NA,NA,NA,https://not.a.real/link.csv,NA,NA,NA,my_custom_plotting_function.rmd.brew
