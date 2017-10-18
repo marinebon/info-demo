@@ -21,3 +21,5 @@ For parrotfish, we want to include some text in the "modal" popup window which a
 In addition to the `modal_before` and `modal_after` texts, we add a caption to individual plots using `plot_caption` in `plot_indicators.csv` for the simpson & shannon diversity index plots of parrotfish.
 
 For the plots that show within a modal popup, we use `plot_indicators.csv`. In this file we give the `svg_id` that matches with the ids in the svg file(s) and in `svg_elements.csv`, along with the details to create the plot.
+
+For most of our plots, we let infographiq use its default plotting function (`plot_dygraph_timeseries`), but for the spiny lobster we use the `plotting_function_call` column in `plot_indicators.csv` to change the default behavior. We use `plot_none` to tell infographiq to use the `plot_none.rmd.brew` template, which does nothing instead of creating a plot.
