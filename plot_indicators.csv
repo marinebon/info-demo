@@ -1,4 +1,4 @@
-Classification_level,svg_id,plot_title,filter,col_t,col_y,col_se,y_label,group_by,csv_url,direct_path,skip_lines,plot_caption,plotting_function_call
+Classification_level,svg_id,plot_title,filter,col_t,col_y,std_err,y_label,group_by,csv_url,direct_path,skip_lines,plot_caption,plotting_function_call
 Foundation species,stony-coral,Stony coral,NA,Year,Stony Coral,NA,% Stony Coral Cover,NA,https://raw.githubusercontent.com/marinebon/info-fk/master/prep/data/CREMP/CREMP_Pcover_group.csv,info-fk/prep/data/CREMP/CREMP_Pcover_group.csv,,,NA
 Foundation species,stony-coral-2,Stony coral,NA,Year,Stony Coral,NA,% Stony Coral Cover,NA,https://raw.githubusercontent.com/marinebon/info-fk/master/prep/data/CREMP/CREMP_Pcover_group.csv,info-fk/prep/data/CREMP/CREMP_Pcover_group.csv,,,
 Invasive species,lionfish,Lionfish Abundance,NA,YEAR,abundance_mean,abundance_se,Abundance,NA,https://raw.githubusercontent.com/marinebon/info-fk/master/prep/data/rvc_trophic_groups/lionfish_abun.csv,info-fk/prep/data/CREMP/CREMP_Pcover_group.csv,,,
