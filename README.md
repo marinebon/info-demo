@@ -26,4 +26,4 @@ For most of our plots, we let infographiq use its default plotting function (`pl
 We use `plot_none` to tell infographiq to use the `plot_none.rmd.brew` template, which does nothing instead of creating a plot.
 We also put R code directly into this cell (wrapped in quotes `"` and quotes within the code are doubled) to create custom plots - for this example we just use the `print` function, but any arbitrary R code can be executed in this way and the output will be put in the modal.
 Next, we have a custom plotting method that was too long to cram into a cell, so we put it into `my_custom_plotting_function.rmd.brew` and the pass this file path as `plotting_function_call` to create a custom plot at site-build-time.
-For our final trick, we have embedded a pre-made html plot by using a path to the plot html in the `csv_url` column and setting `plotting_function_call` to `embed_html`.
+For our final trick, we have embedded a pre-made html plot and a pre-made image by using a path to the data (html file or image, respectively) in the `csv_url` column and setting `plotting_function_call` to `embed_html` or `include_graphic`, respectively.
