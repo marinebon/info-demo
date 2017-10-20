@@ -13,5 +13,5 @@ Trophic group,parrotfish,Parrotfish Simpson Diversity,NA,YEAR,simpson,NA,Effecti
 NA,caribean-spiny-lobster,Lobster Caption w/ No Plot,NA,NA,NA,NA,NA,NA,https://not.a.real/link.csv,NA,NA,captions/lobster.md,plot_none
 NA,caribean-spiny-lobster,Lobster Custom Code Eval (with commas!),NA,NA,NA,NA,NA,NA,https://not.a.real/link.csv,NA,NA,NA,"print(""This is my custom plotter code all shoved into a single column directly in the csv file AND a bunch of commas: ,,,,,a,b,c,123,,,!"")"
 NA,caribean-spiny-lobster,Custom Lobster Plotter From Custom Brew Template,NA,fake-x-axis,fake-y-axis,NA,NA,NA,https://not.a.real/link.csv,NA,NA,NA,my_custom_plotting_function.rmd.brew
-NA,caribean-spiny-lobster,Premade html lobster plot,NA,NA,NA,NA,NA,NA,http://www.chartjs.org/samples/latest/scriptable/bubble.html,NA,NA,NA,embed_html
+NA,caribean-spiny-lobster,Premade html lobster plot,NA,NA,NA,NA,NA,NA,https://plot.ly/~mdtusz/72.embed,NA,NA,NA,embed_html
 NA,caribean-spiny-lobster,Premade lobster image,NA,NA,NA,NA,NA,NA,https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Four_Panulirus_argus.jpg/640px-Four_Panulirus_argus.jpg,NA,NA,NA,include_graphic
