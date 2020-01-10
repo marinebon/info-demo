@@ -1,0 +1,10 @@
+---
+title: "My Website"
+params:
+  svg: "svg/cinms_pelagic.svg"
+  csv: "svg/svg_links.csv"
+---
+
+Hello, Website!
+
+```{r svg, child = '_svg-html_child.Rmd'}

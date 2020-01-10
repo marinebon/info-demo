@@ -11,7 +11,7 @@
 
 
 
-<title>My Website</title>
+<title>About This Website</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -289,40 +289,12 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">My Website</h1>
+<h1 class="title toc-ignore">About This Website</h1>
 
 </div>
 
 
-<p>Hello, Website!</p>
-<script src="libs/d3.v5.min.js"></script>
-<script src="libs/infographiq.js"></script>
-<link href="libs/bootstrap-toggle.min.css" rel="stylesheet">
-<script src="libs/bootstrap-toggle.min.js"></script>
-<div class="col-md-9">
-<div id="svg">
 
-</div>
-</div>
-<div class="col-md-3">
-Text: <input id="toggle-text" type="checkbox" data-toggle="toggle" data-size="mini">
-<div id="toggle-text-event">
-
-</div>
-<ul id="svg_list">
-</ul>
-</div>
-<script>
-link_svg(svg = "svg/cinms_pelagic.svg", csv = "svg/svg_links.csv", debug = true);
-</script>
-<script>
-$(function() {
-$('#toggle-text').change(function() {
-  display = this.checked ? "inline" : "none";
-  d3.select("#text").attr("display", display);
-})
-})
-</script>
 
 
 
