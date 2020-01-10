@@ -1,4 +1,17 @@
 
+<!-- 
+To update table of contents run: `cat README.md | ./gh-md-toc -` 
+Uses: https://github.com/ekalinin/github-markdown-toc
+-->
+* [Create Rmd website](#create-rmd-website)
+* [Add infographic dependencies](#add-infographic-dependencies)
+* [Insert infographic](#insert-infographic)
+* [Build website](#build-website)
+* [View website](#view-website)
+* [technical implementation](#technical-implementation)
+   * [core files: .svg, .csv](#core-files-svg-csv)
+   * [html and js/css dependencies](#html-and-jscss-dependencies)
+
 ## Create Rmd website
 
 Create Rmd website, per [10.5 rmarkdown’s site generator | R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html#a-simple-example).
@@ -73,4 +86,43 @@ Build tab > Build Website button in RStudio or `rmarkdown::render_site()`.
 ```r
 servr::httd("docs")
 ```
+
+## technical implementation
+
+The illustration in scalable vector graphics (`.svg`) format has individual elements given an identefier (ie `id`) which are linked to popup (ie "modal") windows of content using a simple table in comma-seperated value (`.csv`) format using [d3](https://d3js.org).
+
+### core files: `.svg`, `.csv`
+
+These two files are at the core of the infographic construction:
+
+1. **illustration**: [`cinms_pelagic.svg`](https://github.com/marinebon/cinms/blob/master/svg/cinms_pelagic.svg) 
+1. **table**: [`svg_links.csv`](https://github.com/marinebon/iea-ak-info/blob/master/svg/svg_links.csv) 
+
+Each `link` in the table per element identified (`id`) is the page of content displayed in the modal popup window when the given element is clicked. The `title` determines the name on hover and title of the modal window.
+
+### html and js/css dependencies
+
+The illustration (`.svg`) and table (`.csv`) get rendered with the `link_svg()` function (defined in `infographiq.js`) with the following HTML:
+
+```html
+<!-- load dependencies on JS & CSS -->
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<script src='infographiq.js'></script>
+
+<!-- add placeholder in page for placement of svg -->
+<div id='svg'></div>
+
+<!-- run function to link the svg -->
+<script>link_svg(svg='svg/cinms_pelagic.svg', csv='svg/svg_links.csv');</script>
+```
+
+The modal popup windows are rendered by [Bootstrap modals](https://getbootstrap.com/docs/3.3/javascript/#modals). This dependency is included with the default Rmarkdown rendering, but if you need to seperately include it then add this HTML:
+
+```html
+<!-- load dependencies on JS & CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+```
+
 
