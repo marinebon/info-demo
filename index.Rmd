@@ -1,8 +1,10 @@
 ---
 title: "My Website"
 params:
-  svg: "svg/cinms_pelagic.svg"
-  csv: "svg/svg_links.csv"
+  #svg: "svg/cinms_pelagic.svg"
+  svg: "https://raw.githubusercontent.com/marinebon/info-demo/master/svg/cinms_pelagic.svg"
+  #csv: "svg/svg_links.csv"
+  csv: "https://raw.githubusercontent.com/marinebon/info-demo/master/svg/svg_links.csv"
 ---
 
 Hello, Website!
