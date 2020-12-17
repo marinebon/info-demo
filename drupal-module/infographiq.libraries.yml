@@ -1,0 +1,14 @@
+infographiq:
+  version: 1.x
+  #header: true
+  css:
+    # https://www.drupal.org/docs/creating-custom-modules/adding-stylesheets-css-and-javascript-js-to-a-drupal-module
+    layout:
+      css/bootstrap-toggle.min.css: {}
+    theme:
+      css/styles.css: {}
+  js:
+    js/d3.v5.min.js: {}
+    js/infographiq.js: {}
+  dependencies:
+    - core/jquery

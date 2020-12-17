@@ -1,0 +1,27 @@
+name: Infographiq Module
+description: Creates a page showing "Hello World".
+package: Custom
+type: module
+version: 1.0
+core: 9.x
+
+dependencies:
+  - drupal:link
+  - drupal:views
+  - paragraphs:paragraphs
+  - webform:webform
+
+test_dependencies:
+ - drupal:image
+
+configure: hello_world.settings
+
+# php: 5.6
+#
+# hidden: true
+# required: true
+
+# Note: do not add the 'version' or 'project' properties yourself.
+# They will be added automatically by the packager on drupal.org.
+# version: 1.0
+# project: 'hello_world'
